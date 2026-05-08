@@ -1,100 +1,102 @@
+﻿/* eslint-disable react/no-array-index-key */
 /* eslint-disable jsx-a11y/label-has-associated-control */
-import React, { useState, useCallback, useRef, useEffect } from 'react'
-import { useHistory, useLocation } from 'react-router-dom'
-import { FormHandles } from '@unform/core'
-import { Form } from '@unform/web'
-import Modal from 'react-modal'
+import {
+  Form,
+  Formik,
+  FormikHelpers,
+  FormikProps,
+  yupToFormErrors,
+} from 'formik'
 import moment from 'moment'
-import * as Yup from 'yup'
-
-import { FiUser, FiX, FiPercent } from 'react-icons/fi'
-import { MdSecurity } from 'react-icons/md'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { AiOutlineQuestionCircle } from 'react-icons/ai'
-
 import { BiCake } from 'react-icons/bi'
-import getValidationErrors from '../../utils/getValidationErrors'
-import usePersistedState from '../../hooks/usePersistedState'
-import validaCPF from '../../utils/validaCPF'
-
-import InputSelect from '../../components/InputSelect'
-import InputHidden from '../../components/InputHidden'
-import Header from '../../components/Header'
+import {
+  FiArrowLeft,
+  FiArrowRight,
+  FiPercent,
+  FiUser,
+  FiX,
+} from 'react-icons/fi'
+import { MdSecurity } from 'react-icons/md'
+import Modal from 'react-modal'
+import { useHistory, useLocation } from 'react-router-dom'
+import * as Yup from 'yup'
+import BackButton from '../../components/BackButton'
+import BeneficiaryCard from '../../components/BeneficiaryCard'
+import BeneficiaryContent from '../../components/BeneficiaryContent'
 import Button from '../../components/Button'
+import ChoiceField from '../../components/ChoiceField'
 import Input from '../../components/Input'
-
-import {
-  Container,
-  Content,
-  RadioButton,
-  BtnVoltar,
-  BtnContato,
-  Line,
-  BenefBox,
-  ContentBenef,
-} from './styles'
-import {
-  UserData,
-  Participant,
-  ParticipantDetails,
-} from '../../utils/interfaces'
+import InputSelect from '../../components/InputSelect'
+import PageCard from '../../components/PageCard'
+import PageLayout from '../../components/PageLayout'
+import SectionDivider from '../../components/SectionDivider'
+import SegmentedOptionButton from '../../components/SegmentedOptionButton'
+import usePersistedState from '../../hooks/usePersistedState'
+import { sanitizeCpf, scrollToPosition } from '../../utils/browser'
 import calculaIdade from '../../utils/calculaIdade'
+import { Participant, UserData } from '../../utils/interfaces'
+import validaCPF from '../../utils/validaCPF'
 
 Modal.setAppElement('#root')
 
+const RadioButton = ({
+  children,
+}: React.PropsWithChildren): React.JSX.Element => (
+  <ChoiceField variant="outlined">{children}</ChoiceField>
+)
+
+const BenefBox = BeneficiaryCard
+
+const ContentBenef = BeneficiaryContent
+
+const legalOptions = [
+  { label: 'Conjuge', value: '1' },
+  { label: 'Companheiro(a)', value: '2' },
+  { label: 'Filho(a) não emancipado menor de 21 anos', value: '3' },
+  { label: 'Filho(a) inválido(a)', value: '4' },
+  {
+    label: 'Enteado não emancipado menor de 21 anos com dependência econômica',
+    value: '8',
+  },
+  { label: 'Enteado inválido com dependência econômica', value: '9' },
+]
+
+const indicadoOptions = [
+  { label: 'Pai/Mãe', value: '12' },
+  { label: 'Neto', value: '13' },
+  { label: 'Avô/Avó', value: '14' },
+  { label: 'Tio(a)', value: '15' },
+  { label: 'Cunhado(a)', value: '16' },
+  { label: 'Amigo(a)', value: '17' },
+  { label: 'Primo(a)', value: '18' },
+  { label: 'Filho(a)', value: '19' },
+  { label: 'Irmão(ã)', value: '20' },
+  { label: 'Outros', value: '0' },
+]
+
+interface NovoParticipanteFormValues {
+  addNew: 'true' | 'false'
+  name: string
+  cpf: string
+  birthdate: string
+  grauParentesco: string
+  proporcao: string
+  mrcInvalidez: string
+}
+
 const NovoParticipante: React.FC = () => {
   const [userData] = usePersistedState<UserData>('userData', {} as UserData)
-  const [userDetails] = usePersistedState<ParticipantDetails>(
-    'userDetails',
-    {} as ParticipantDetails,
-  )
-
   const [participants, setParticipants] = usePersistedState<Participant[]>(
     'participantsGroup',
     [],
   )
-
-  const [vlrProporcao, setVlrProporcao] = useState(1)
-  const [, setSaveAndAddNew] = useState(false)
   const [tipoBenef, setTipoBenef] = useState('2')
   const [isModalOpen, setIsModalOpen] = useState(false)
-
-  const [thisParticipantData] = useState<UserData>({} as UserData)
-  const [thisParticipantDetails] = useState<ParticipantDetails>(
-    {} as ParticipantDetails,
-  )
-  const [thisParticipant, setThisParticipant] = useState<Participant>(
-    {} as Participant,
-  )
-
-  const [grauParent, setGrauParent] = useState({
-    label: userDetails.dcrGrauParentesco,
-    value: userDetails.grauParentesco,
-  })
-
-  const formRef = useRef<FormHandles>(null)
+  const formikRef = useRef<FormikProps<NovoParticipanteFormValues>>(null)
   const history = useHistory()
   const location = useLocation()
-
-  // const [dtNasc, setDtNasc] = useState('')
-
-  const handleAddNovo = useCallback(() => {
-    setSaveAndAddNew(true)
-    const field = formRef.current?.getFieldRef('addNew')
-    field.value = true
-    formRef.current?.submitForm()
-  }, [])
-
-  const handleJustSave = useCallback(() => {
-    setSaveAndAddNew(false)
-    const field = formRef.current?.getFieldRef('addNew')
-    field.value = false
-    formRef.current?.submitForm()
-  }, [])
-
-  const handleChangeGrauParentesco = useCallback(e => {
-    const t = e
-    setGrauParent(t)
-  }, [])
 
   const handleOpenModal = useCallback(() => {
     setIsModalOpen(true)
@@ -105,7 +107,7 @@ const NovoParticipante: React.FC = () => {
   }, [])
 
   const handleRemove = useCallback(
-    id => {
+    (id: number) => {
       setParticipants(() =>
         participants.filter((participant, idx) => idx !== id),
       )
@@ -114,480 +116,424 @@ const NovoParticipante: React.FC = () => {
   )
 
   useEffect(() => {
-    const benefBox = document.getElementById('benefBox') as HTMLDivElement
-    const altura = benefBox.clientHeight
-    window.scrollTo({
-      top: altura,
-      left: 0,
-      behavior: 'smooth',
-    })
+    const benefBox = document.getElementById(
+      'benefBox',
+    ) as HTMLDivElement | null
+
+    if (benefBox) {
+      scrollToPosition(benefBox.clientHeight, 0)
+    }
   }, [])
 
-  const handleSubmit = useCallback(
-    async formData => {
+  const soma = participants
+    .filter(participant => participant.details.tipoBen === '1')
+    .reduce((total, participant) => total + participant.details.proporcao, 0)
+
+  const remainingProporcao = soma === 0 ? 100 : 100 - soma
+  const currentOptions = tipoBenef === '2' ? legalOptions : indicadoOptions
+
+  const validate = useCallback(
+    async (values: NovoParticipanteFormValues) => {
+      const schema = Yup.object().shape({
+        name: Yup.string()
+          .required('Campo obrigatório')
+          .matches(/\s/g, 'Digite o nome completo')
+          .min(3, 'Digite o nome completo'),
+        birthdate: Yup.string()
+          .min(10, 'Data de nascimento inválida')
+          .required('Campo obrigatório')
+          .test(
+            '',
+            'A data de nascimento não pode ser maior que hoje.',
+            () =>
+              moment() >
+                moment(values.birthdate.split('/').reverse().join('-')) ||
+              values.birthdate === '',
+          )
+          .test(
+            '',
+            'Data de nascimento inválida',
+            () =>
+              moment(
+                values.birthdate.split('/').reverse().join('-'),
+              ).isValid() || values.birthdate === '',
+          )
+          .test(
+            '',
+            'Data de nascimento inválida',
+            () =>
+              calculaIdade(values.birthdate.split('/').reverse().join('-')) <=
+                115 || values.birthdate === '',
+          ),
+        cpf: Yup.string()
+          .required('CPF é obrigatório.')
+          .test('', 'CPF já utilizado em outro cadastro', () => {
+            return (
+              (participants.filter(
+                participant => participant.data.cpf === values.cpf,
+              ).length <= 0 &&
+                values.cpf !== userData.cpf) ||
+              values.cpf === ''
+            )
+          })
+          .test(
+            '',
+            'CPF inválido',
+            () =>
+              validaCPF(sanitizeCpf(values.cpf)) || values.cpf === '',
+          ),
+        proporcao: Yup.string().test('', 'Campo obrigatório', () => {
+          if (tipoBenef === '2') {
+            return true
+          }
+
+          const value = Number(values.proporcao)
+          return value > 0 && value <= remainingProporcao
+        }),
+        mrcInvalidez: Yup.string().test('', 'Campo obrigatório', () => {
+          return (
+            (tipoBenef === '2' && values.mrcInvalidez !== '') ||
+            tipoBenef === '1'
+          )
+        }),
+        grauParentesco: Yup.string().required('Campo obrigatório'),
+      })
+
       try {
-        formRef.current?.setErrors({})
+        await schema.validate(values, { abortEarly: false })
+        return {}
+      } catch (err) {
+        return yupToFormErrors(err as Yup.ValidationError)
+      }
+    },
+    [participants, remainingProporcao, tipoBenef, userData.cpf],
+  )
 
-        const schema = Yup.object().shape({
-          name: Yup.string()
-            .required('Seu nome é obrigatório.')
-            .matches(/\s/g, 'Digite o nome completo')
-            .min(3, 'Digite o nome completo'),
-          birthdate: Yup.string()
-            .min(10, 'Data de nascimento inválida')
-            .required('Data de nascimento é obrigatória.')
-            .test(
-              '',
-              'A data de nascimento não pode ser maior que hoje.',
-              () =>
-                moment() >
-                  moment(formData.birthdate.split('/').reverse().join('-')) ||
-                formData.birthdate === '',
-            )
-            .test(
-              '',
-              'Data de nascimento inválida',
-              () =>
-                moment(
-                  formData.birthdate.split('/').reverse().join('-'),
-                ).isValid() || formData.birthdate === '',
-            )
-            .test(
-              '',
-              'Data de nascimento inválida',
-              () =>
-                calculaIdade(
-                  formData.birthdate.split('/').reverse().join('-'),
-                ) <= 115 || formData.birthdate === '',
-            ),
-          cpf: Yup.string()
-            .required('CPF é obrigatório.')
-            .test('', 'CPF já utilizado em outro cadastro', function v() {
-              const t2 =
-                (participants.filter(
-                  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-                  (participant, idx) => participant.data.cpf === formData.cpf,
-                ).length <= 0 &&
-                  formData.cpf !== userData.cpf) ||
-                formData.cpf === ''
-              return t2
-            })
-            .test('', 'CPF inválido', function t() {
-              const teste =
-                validaCPF(formData.cpf.replaceAll('.', '').replace('-', '')) ||
-                formData.cpf === ''
-              return teste
-            }),
-          proporcao: Yup.string().test(
-            '',
-            'Campo obrigatório',
-            () =>
-              (tipoBenef === '1' && formData.proporcao > 0) ||
-              tipoBenef === '2',
-          ),
-          mrcInvalidez: Yup.string().test(
-            '',
-            'Campo obrigatório',
-            () =>
-              (tipoBenef === '2' && formData.mrcInvalidez !== '') ||
-              tipoBenef === '1',
-          ),
-          grauParentesco: Yup.string().required('Campo obrigatório'),
-        })
+  const handleSubmit = useCallback(
+    async (
+      values: NovoParticipanteFormValues,
+      helpers: FormikHelpers<NovoParticipanteFormValues>,
+    ) => {
+      const dia = values.birthdate.split('/')[0]
+      const mes = values.birthdate.split('/')[1]
+      const ano = values.birthdate.split('/')[2]
+      const dataForm = `${ano}-${`0${mes}`.slice(-2)}-${`0${dia}`.slice(-2)}`
+      const grauParentescoLabel =
+        currentOptions.find(option => option.value === values.grauParentesco)
+          ?.label ?? ''
 
-        await schema.validate(formData, { abortEarly: false })
-
-        const aa = formData.birthdate
-        const dia = aa.split('/')[0]
-        const mes = aa.split('/')[1]
-        const ano = aa.split('/')[2]
-        const dataForm = `${ano}-${`0${mes}`.slice(-2)}-${`0${dia}`.slice(-2)}`
-
-        setThisParticipant({
-          ...thisParticipant,
+      setParticipants([
+        ...participants,
+        {
           data: {
-            ...thisParticipantData,
-            name: formData.name,
-            cpf: formData.cpf,
-            birthdate: formData.birthdate === '' ? '' : dataForm,
+            name: values.name,
+            cpf: values.cpf,
+            birthdate: values.birthdate === '' ? '' : dataForm,
           },
           details: {
-            ...thisParticipantDetails,
             tipoBen: tipoBenef,
-            grauParentesco: grauParent.value,
-            dcrGrauParentesco: grauParent.label,
-            proporcao: tipoBenef === '1' ? vlrProporcao : 0,
-            mrcInvalidez: formData.mrcInvalidez,
+            grauParentesco: values.grauParentesco,
+            dcrGrauParentesco: grauParentescoLabel,
+            proporcao: tipoBenef === '1' ? Number(values.proporcao) : 0,
+            mrcInvalidez: values.mrcInvalidez,
           },
-        })
+        } as Participant,
+      ])
 
-        setParticipants([
-          ...participants,
-          {
-            ...thisParticipant,
-            data: {
-              ...thisParticipantData,
-              name: formData.name,
-              cpf: formData.cpf,
-              birthdate: formData.birthdate === '' ? '' : dataForm,
-            },
-            details: {
-              ...thisParticipantDetails,
-              tipoBen: tipoBenef,
-              grauParentesco: grauParent.value,
-              dcrGrauParentesco: grauParent.label,
-              proporcao: tipoBenef === '1' ? vlrProporcao : 0,
-              mrcInvalidez: formData.mrcInvalidez,
-            },
-          },
-        ])
-        if (formData.addNew === 'true') {
-          history.push(`${location.pathname}`)
-          formRef.current?.reset()
-        } else {
-          history.push('/participants-list')
-        }
-      } catch (err) {
-        formRef.current?.setErrors(getValidationErrors(err))
+      if (values.addNew === 'true') {
+        helpers.resetForm()
+        setTipoBenef('2')
+        history.push(location.pathname)
+      } else {
+        history.push('/participants-list')
       }
     },
     [
-      grauParent,
+      currentOptions,
       history,
       location.pathname,
       participants,
       setParticipants,
-      thisParticipant,
-      thisParticipantData,
-      thisParticipantDetails,
       tipoBenef,
-      userData,
-      vlrProporcao,
     ],
   )
 
-  const arr = participants.map(participant => participant.details.proporcao)
-  let soma = 0
-  for (let i = 0; i < arr.length; i += 1) {
-    soma += arr[i]
-  }
-  const handleValidaProporcao = useCallback((prop, s) => {
-    if (prop < 1 || prop > s) {
-      const msg = `A proporção deve ser maior que 1 e menor que ${s}`
-      // eslint-disable-next-line no-alert
-      alert(msg)
-    } else {
-      setVlrProporcao(prop)
-    }
+  const handleAddNovo = useCallback(() => {
+    formikRef.current?.setFieldValue('addNew', 'true')
+    formikRef.current?.submitForm()
+  }, [])
+
+  const handleJustSave = useCallback(() => {
+    formikRef.current?.setFieldValue('addNew', 'false')
+    formikRef.current?.submitForm()
   }, [])
 
   return (
-    <>
-      <Header />
-      <Container>
-        <div id="benefBox" style={{ width: '100%' }}>
-          {participants.length > 0 ? (
-            <BenefBox>
-              <h3>Beneficiários</h3>
-              {participants.map((participant, index) => (
-                <ContentBenef key={index}>
-                  <div>
-                    <FiX onClick={() => handleRemove(index)} />
-                    <div>
-                      <small>
-                        {`${index + 1} - Beneficiário ${
-                          participant.details.tipoBen === '1' ? 'Indicado' : ''
-                        }`}
-                      </small>
-                    </div>
-                    <div>
-                      <strong>Nome: </strong>
-                      <label>{participant.data.name}</label>
-                    </div>
-                    <div>
-                      <strong>Idade: </strong>
-                      <label>
-                        {calculaIdade(participant.data.birthdate)} anos
+    <PageLayout>
+      <div id="benefBox" style={{ width: '100%' }}>
+        {participants.length > 0 ? (
+          <BenefBox>
+            <strong className="mb-4 flex justify-center text-center text-lg text-brand-400">
+              Beneficiários
+            </strong>
+            {participants.map((participant, index) => (
+              <ContentBenef key={`${participant.data.cpf}-${index}`}>
+                <div className="relative flex flex-col gap-2">
+                  <FiX
+                    className="absolute right-1.25 top-0 size-5 cursor-pointer text-danger"
+                    onClick={() => handleRemove(index)}
+                  />
+                  <div className="">
+                    <small className="text-xs leading-5 text-[#636363]">
+                      {`${index + 1} - Beneficiário ${
+                        participant.details.tipoBen === '1' ? 'Indicado' : ''
+                      }`}
+                    </small>
+                  </div>
+                  <div className="flex flex-wrap items-center gap-1 text-sm text-ink-900">
+                    <strong className="font-bold">Nome:</strong>
+                    <label className="text-sm text-ink-900">
+                      {participant.data.name}
+                    </label>
+                  </div>
+                  <div className="flex flex-wrap items-center gap-1 text-sm text-ink-900">
+                    <strong className="font-bold">Idade:</strong>
+                    <label className="text-sm text-ink-900">
+                      {calculaIdade(participant.data.birthdate)} anos
+                    </label>
+                  </div>
+                  <div className="flex flex-wrap items-center gap-1 text-sm text-ink-900">
+                    <strong className="font-bold">CPF:</strong>
+                    <label className="text-sm text-ink-900">
+                      {participant.data.cpf}
+                    </label>
+                  </div>
+                  <div className="flex flex-wrap items-center gap-1 text-sm text-ink-900">
+                    <strong className="font-bold">Vínculo:</strong>
+                    <label className="text-sm text-ink-900">
+                      {participant.details.dcrGrauParentesco}
+                    </label>
+                  </div>
+                  {participant.details.tipoBen === '2' ? (
+                    <div className="flex flex-wrap items-center gap-1 text-sm text-ink-900">
+                      <strong className="font-bold">Pessoa inválida:</strong>
+                      <label className="text-sm text-ink-900">
+                        {participant.details.mrcInvalidez === 'S'
+                          ? 'Sim'
+                          : 'Não'}
                       </label>
                     </div>
-                    <div>
-                      <strong>CPF: </strong>
-                      <label>{participant.data.cpf}</label>
+                  ) : (
+                    <div className="flex flex-wrap items-center gap-1 text-sm text-ink-900">
+                      <strong className="font-bold">Proporção:</strong>
+                      <label className="text-sm text-ink-900">
+                        {`${participant.details.proporcao} %`}
+                      </label>
                     </div>
-                    <div>
-                      <strong>Vínculo: </strong>
-                      <label>{participant.details.dcrGrauParentesco}</label>
-                    </div>
-                    {participant.details.tipoBen === '2' ? (
-                      <div>
-                        <strong>Pessoa inválida: </strong>
-                        <label>
-                          {participant.details.mrcInvalidez === 'S'
-                            ? 'Sim'
-                            : 'Não'}
-                        </label>
-                      </div>
-                    ) : (
-                      <div>
-                        <strong>Proporção: </strong>
-                        <label>{`${participant.details.proporcao} %`}</label>
-                      </div>
-                    )}
-                  </div>
-                  <Line />
-                </ContentBenef>
-              ))}
-            </BenefBox>
-          ) : null}
-        </div>
+                  )}
+                </div>
+                <SectionDivider className="mb-5 mt-6 w-2/3" />
+              </ContentBenef>
+            ))}
+          </BenefBox>
+        ) : null}
+      </div>
 
-        <Content>
-          <strong>Adicione um beneficiário: </strong>
-          <Form
-            ref={formRef}
-            onSubmit={handleSubmit}
-            initialData={{
-              name: thisParticipantData.name,
-              cpf: thisParticipantData.cpf,
-              tipoBen: thisParticipantDetails.tipoBen,
-              birthdate:
-                thisParticipantData.birthdate === undefined
-                  ? ''
-                  : thisParticipantData.birthdate
-                      .split('-')
-                      .reverse()
-                      .join('/'),
-              grauParentesco: grauParent.value,
-              dcrGrauParentesco: grauParent.label,
+      <Formik<NovoParticipanteFormValues>
+        innerRef={formikRef}
+        initialValues={{
+          addNew: 'false',
+          name: '',
+          cpf: '',
+          birthdate: '',
+          grauParentesco: '',
+          proporcao: '',
+          mrcInvalidez: '',
+        }}
+        validate={validate}
+        onSubmit={handleSubmit}
+      >
+        {({ setFieldValue, values }) => (
+          <Form className="w-full">
+            <PageCard className="flex flex-col items-center">
+              <strong className="mb-4 flex justify-center text-center text-lg text-brand-400">
+                Adicione um beneficiário:
+              </strong>
+
+              <RadioButton>
+                <AiOutlineQuestionCircle
+                  className="absolute right-1.25 top-1.25 cursor-pointer text-lg text-brand-400"
+                  onClick={handleOpenModal}
+                />
+                <label className="mb-3 text-xs font-bold text-ink-700">
+                  Tipo de beneficiário
+                </label>
+                <div className="w-9/10 flex flex-row my-3 shadow-md rounded-full bg-[#AEAEAE]/20 self-center">
+                  <SegmentedOptionButton
+                    type="button"
+                    isActive={tipoBenef === '2'}
+                    className="p-2"
+                    onClick={() => {
+                      setTipoBenef('2')
+                      setFieldValue('grauParentesco', '')
+                      setFieldValue('mrcInvalidez', '')
+                      setFieldValue('proporcao', '')
+                    }}
+                  >
+                    Beneficiário legal
+                  </SegmentedOptionButton>
+                  <SegmentedOptionButton
+                    type="button"
+                    isActive={tipoBenef === '1'}
+                    className="p-2"
+                    onClick={() => {
+                      setTipoBenef('1')
+                      setFieldValue('grauParentesco', '')
+                      setFieldValue('mrcInvalidez', '')
+                      setFieldValue('proporcao', '')
+                    }}
+                  >
+                    Beneficiário indicado
+                  </SegmentedOptionButton>
+                </div>
+              </RadioButton>
+
+              <InputSelect
+                name="grauParentesco"
+                options={currentOptions}
+                placeholder="Tipo de vínculo"
+              />
+              <Input placeholder="Nome completo" name="name" icon={FiUser} />
+              <Input
+                placeholder="CPF"
+                name="cpf"
+                id="cpf"
+                icon={MdSecurity}
+                type="tel"
+                mask="cpf"
+                required
+              />
+              <Input
+                icon={BiCake}
+                name="birthdate"
+                placeholder="Data de nascimento"
+                mask="date"
+              />
+
+              {tipoBenef === '1' ? (
+                <Input
+                  placeholder="Proporção"
+                  icon={FiPercent}
+                  name="proporcao"
+                  type="number"
+                  min="1"
+                  max={remainingProporcao}
+                  value={values.proporcao}
+                />
+              ) : (
+                <InputSelect
+                  name="mrcInvalidez"
+                  options={[
+                    { label: 'Sim', value: 'S' },
+                    { label: 'Não', value: 'N' },
+                  ]}
+                  placeholder="Pessoa inválida?"
+                />
+              )}
+              <Button type="button" fontSize="small" onClick={handleAddNovo}>
+                Adicionar mais um beneficiário
+              </Button>
+            </PageCard>
+          </Form>
+        )}
+      </Formik>
+      {participants.length > 0 ? (
+        <Button
+          type="button"
+          fontSize="normal"
+          color="orange"
+          onClick={() => history.push('/participants-list')}
+        >
+          Continuar <FiArrowRight size={20} />
+        </Button>
+      ) : (
+        <>
+          <Button
+            type="button"
+            fontSize="normal"
+            color="orange"
+            onClick={handleJustSave}
+          >
+            Continuar <FiArrowRight size={20} />
+          </Button>
+          <Button
+            type="button"
+            fontSize="normal"
+            color="pink"
+            onClick={() => {
+              userData.patrocinadora === '2' || userData.patrocinadora === '3'
+                ? history.push('/care-plan')
+                : history.push('/resume')
             }}
           >
-            <InputHidden name="addNew" type="hidden" />
-            <InputHidden name="contribution" type="hidden" />
-            <InputHidden name="years" type="hidden" />
-
-            <RadioButton>
-              <AiOutlineQuestionCircle onClick={handleOpenModal} />
-              <label>Tipo de Beneficiário</label>
-              <div>
-                <BtnContato
-                  type="button"
-                  isActive={tipoBenef === '2'}
-                  onClick={() => {
-                    setTipoBenef('2')
-                    setGrauParent({ label: '', value: '' })
-                  }}
-                >
-                  Beneficiário legal
-                </BtnContato>
-                <BtnContato
-                  type="button"
-                  isActive={tipoBenef === '1'}
-                  onClick={() => {
-                    setTipoBenef('1')
-                    setGrauParent({ label: '', value: '' })
-                  }}
-                >
-                  Beneficiário indicado
-                </BtnContato>
-              </div>
-            </RadioButton>
-
-            {tipoBenef === '2' ? (
-              <InputSelect
-                name="grauParentesco"
-                value={grauParent}
-                options={[
-                  { label: 'Conjuge', value: '1' },
-                  { label: 'Companheiro(a)', value: '2' },
-                  {
-                    label: 'Filho(a) não emancipado menor de 21 anos',
-                    value: '3',
-                  },
-                  { label: 'Filho(a) inválido(a)', value: '4' },
-                  {
-                    label:
-                      'Enteado não emancipado menor de 21 anos com dependência econômica',
-                    value: '8',
-                  },
-                  {
-                    label: 'Enteado inválido com dependência econômica',
-                    value: '9',
-                  },
-                ]}
-                placeholder="Tipo de Vínculo"
-                onChange={e => handleChangeGrauParentesco(e)}
-              />
-            ) : (
-              <InputSelect
-                name="grauParentesco"
-                value={grauParent}
-                options={[
-                  { label: 'Pai/Mãe', value: '12' },
-                  { label: 'Neto', value: '13' },
-                  { label: 'Avô/Avó', value: '14' },
-                  { label: 'Tio(a)', value: '15' },
-                  { label: 'Cunhado(a)', value: '16' },
-                  { label: 'Amigo(a)', value: '17' },
-                  { label: 'Primo(a)', value: '18' },
-                  { label: 'Filho(a)', value: '19' },
-                  { label: 'Irmão(ã)', value: '20' },
-                  { label: 'Outros', value: '0' },
-                ]}
-                placeholder="Tipo de Vínculo"
-                onChange={e => handleChangeGrauParentesco(e)}
-              />
-            )}
-            <Input placeholder="Nome completo" name="name" icon={FiUser} />
-            <Input
-              placeholder="CPF"
-              name="cpf"
-              id="cpf"
-              icon={MdSecurity}
-              type="tel"
-              mask="cpf"
-              required
-            />
-            {/* <Input
-              icon={FiCalendar}
-              name="birthdate"
-              value={dtNasc}
-              placeholder="Data de nascimento"
-              min="1930-01-01"
-              max={new Date().toISOString().split('T')[0]}
-              onChange={e => handleOnChange(e)}
-              onKeyDown={e => handleOnKeyDown(e)}
-            /> */}
-            <Input
-              icon={BiCake}
-              name="birthdate"
-              placeholder="Data de nascimento"
-              mask="date"
-            />
-            {tipoBenef === '1' ? (
-              <Input
-                placeholder="Proporção"
-                icon={FiPercent}
-                value={vlrProporcao}
-                name="proporcao"
-                type="number"
-                min="1"
-                max={soma === 0 ? 100 : 100 - soma}
-                onChange={e => {
-                  handleValidaProporcao(
-                    e.target.valueAsNumber,
-                    soma === 0 ? 100 : 100 - soma,
-                  )
-                }}
-              />
-            ) : (
-              <InputSelect
-                name="mrcInvalidez"
-                options={[
-                  { label: 'Sim', value: 'S' },
-                  { label: 'Não', value: 'N' },
-                ]}
-                placeholder="Pessoa inválida?"
-              />
-            )}
-          </Form>
-          <Button type="button" fontSize="small" onClick={handleAddNovo}>
-            Adicionar mais um beneficiário
+            <span>Não tenho beneficiários</span>
           </Button>
-        </Content>
+        </>
+      )}
 
-        {participants.length > 0 ? (
-          // <Button
-          //   type="button"
-          //   fontSize="normal"
-          //   color="white"
-          //   onClick={() => history.push('/participants-list')}
-          // >
-          //   Ver beneficiários
-          // </Button>
-          <>
-            <Button
-              type="button"
-              fontSize="normal"
-              color="orange"
-              onClick={() => history.push('/participants-list')}
-            >
-              <span>Continuar</span>
-            </Button>
-          </>
-        ) : (
-          <>
-            <Button
-              type="button"
-              fontSize="normal"
-              color="orange"
-              onClick={handleJustSave}
-            >
-              <span>Continuar</span>
-            </Button>
-            <Button
-              type="button"
-              fontSize="normal"
-              color="pink"
-              onClick={() => {
-                userData.patrocinadora === '2' || userData.patrocinadora === '3'
-                  ? history.push('/care-plan')
-                  : history.push('/resume')
-              }}
-            >
-              <span>Não tenho beneficiários</span>
-            </Button>
-          </>
-        )}
+      <BackButton type="button" onClick={() => history.goBack()}>
+        <FiArrowLeft /> Voltar
+      </BackButton>
 
-        <BtnVoltar type="button" onClick={() => history.goBack()}>
-          &lt; Anterior
-        </BtnVoltar>
+      <Modal
+        isOpen={isModalOpen}
+        onRequestClose={handleCloseModal}
+        overlayClassName="fixed inset-0 z-20 flex items-center justify-center bg-black/55 px-4"
+        className="relative w-full max-w-125 rounded bg-panel-muted px-6 py-8 outline-none max-md:max-w-100"
+        ariaHideApp={false}
+      >
+        <FiX onClick={handleCloseModal} />
+        <h3 className="mb-4 text-center text-lg font-bold text-brand-400">
+          Qual a diferença entre os tipos de beneficiários?
+        </h3>
+        <div className="flex flex-col gap-3 text-sm leading-6 text-ink-900">
+          <strong className="text-base font-bold text-ink-900">
+            Beneficiário
+          </strong>
+          <ul className="list-disc pl-5">
+            <li>Cônjuge ou companheiro;</li>
+            <li>
+              Filhos e enteados menores de 21 anos que se enquadrarem nas
+              condições de dependentes na Previdência Social;
+            </li>
+            <li>
+              Filhos e enteados solteiros menores de 24 anos que estejam
+              cursando ensino superior reconhecido pelo Ministério da Educação;
+            </li>
+            <li>
+              Filhos inválidos de qualquer idade que se enquadrarem nas
+              condições de dependentes na Previdência Social.
+            </li>
+          </ul>
+        </div>
 
-        <Modal
-          isOpen={isModalOpen}
-          onRequestClose={handleCloseModal}
-          overlayClassName="react-modal-overlay"
-          className="react-modal-content"
-        >
-          <FiX onClick={handleCloseModal} />
-          <h3>Qual a diferença entre os tipos de beneficiários?</h3>
-          <div>
-            <strong>Beneficiário</strong>
-            <ul>
-              <li>Cônjuge ou companheiro;</li>
-              <li>
-                Filhos e enteados menores de 21 anos que se enquadrarem nas
-                condições de dependentes na Previdência Social;
-              </li>
-              <li>
-                Filhos e enteados solteiros menores de 24 anos que estejam
-                cursando ensino superior reconhecido pelo Ministério da
-                Educação;
-              </li>
-              <li>
-                Filhos inválidos de qualquer idade que se enquadrarem nas
-                condições de dependentes na Previdência Social.
-              </li>
-            </ul>
-          </div>
+        <SectionDivider className="mb-5 mt-6 w-2/3" />
 
-          <Line />
-
-          <div>
-            <strong>Beneficiário Indicado</strong>
-            <ul>
-              <li>
-                Pessoas físicas indicadas no caso de inexistência de
-                beneficiário.
-              </li>
-              <li>
-                Este só será acionado em caso de ausência do beneficiário legal
-              </li>
-            </ul>
-          </div>
-        </Modal>
-      </Container>
-    </>
+        <div className="flex flex-col gap-3 text-sm leading-6 text-ink-900">
+          <strong className="text-base font-bold text-ink-900">
+            Beneficiário Indicado
+          </strong>
+          <ul className="list-disc pl-5">
+            <li>
+              Pessoas físicas indicadas no caso de inexistência de beneficiário.
+            </li>
+            <li>
+              Este só será acionado em caso de ausência do beneficiário legal
+            </li>
+          </ul>
+        </div>
+      </Modal>
+    </PageLayout>
   )
 }
 

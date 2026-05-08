@@ -1,14 +1,17 @@
 import React, {
   createContext,
   useCallback,
-  useState,
   useContext,
   useEffect,
+  useState,
 } from 'react'
 
-import { decode } from 'jsonwebtoken'
-
 import api from '../services/api'
+import {
+  getStorageItem,
+  removeStorageItem,
+  setStorageItem,
+} from '../utils/storage'
 
 interface AuthState {
   token: string
@@ -46,16 +49,30 @@ interface AuthContextData {
   updateProfile(user: AuthContextData['user']): void
 }
 
+function decodeTokenPayload(token: string): { exp?: number; iat?: number } {
+  try {
+    const [, payload = ''] = token.split('.')
+    const normalized = payload.replace(/-/g, '+').replace(/_/g, '/')
+    const decoded = window.atob(normalized)
+
+    return JSON.parse(decoded)
+  } catch {
+    return {}
+  }
+}
+
 const AuthContext = createContext<AuthContextData>({} as AuthContextData)
 
-const AuthProvider: React.FC = ({ children }) => {
+const AuthProvider = ({
+  children,
+}: React.PropsWithChildren): React.JSX.Element => {
   const [expired, setExpired] = useState(false)
   const [data, setData] = useState<AuthState>(() => {
-    const token = localStorage.getItem('@BRFPrev:token')
-    const user = localStorage.getItem('@BRFPrev:user')
+    const token = getStorageItem('authToken', ['@BRFPrev:token'])
+    const user = getStorageItem('authUser', ['@BRFPrev:user'])
 
     if (token && user) {
-      const { exp } = decode(token) as { exp: number | 0; iat: number | 0 }
+      const { exp = 0 } = decodeTokenPayload(token)
 
       // o token está expirado.
       if (Date.now() > exp * 1000) {
@@ -69,7 +86,7 @@ const AuthProvider: React.FC = ({ children }) => {
     return {} as AuthState
   })
 
-  const signIn = useCallback(async ({ email, password }) => {
+  const signIn = useCallback(async ({ email, password }): Promise<void> => {
     const response = await api.post('/sessions', {
       email,
       password,
@@ -77,8 +94,8 @@ const AuthProvider: React.FC = ({ children }) => {
 
     const { token, user } = response.data
 
-    localStorage.setItem('@BRFPrev:token', token)
-    localStorage.setItem('@BRFPrev:user', JSON.stringify(user))
+    setStorageItem('authToken', token)
+    setStorageItem('authUser', JSON.stringify(user))
 
     setData({ token, user })
 
@@ -86,9 +103,9 @@ const AuthProvider: React.FC = ({ children }) => {
   }, [])
 
   const updateProfile = useCallback(
-    (newUser: AuthContextData['user']) => {
+    (newUser: AuthContextData['user']): void => {
       if (newUser.id === data?.user?.id) {
-        localStorage.setItem('@BRFPrev:user', JSON.stringify(newUser))
+        setStorageItem('authUser', JSON.stringify(newUser))
 
         setData({ token: data.token, user: newUser })
       }
@@ -96,9 +113,9 @@ const AuthProvider: React.FC = ({ children }) => {
     [data],
   )
 
-  const signOut = useCallback(() => {
-    localStorage.removeItem('@BRFPrev:token')
-    localStorage.removeItem('@BRFsPrev:user')
+  const signOut = useCallback((): void => {
+    removeStorageItem('authToken', ['@BRFPrev:token'])
+    removeStorageItem('authUser', ['@BRFPrev:user', '@BRFsPrev:user'])
     setData({} as AuthState)
 
     setExpired(false)

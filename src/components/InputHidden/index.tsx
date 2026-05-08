@@ -1,43 +1,28 @@
-import React, {
-  InputHTMLAttributes,
-  useEffect,
-  useRef,
-} from 'react'
-
-import { useField } from '@unform/core'
-
-import { Container } from './styles'
+import React, { InputHTMLAttributes, useEffect } from 'react'
+import { useField } from 'formik'
 
 interface Props extends InputHTMLAttributes<HTMLInputElement> {
   name: string
   type: 'hidden'
 }
 
-const InputHidden: React.FC<Props> = ({ name, type, ...rest }) => {
-  const inputRef = useRef<HTMLInputElement>(null)
-  const {
-    fieldName,
-    defaultValue,
-    registerField,
-  } = useField(name)
+const InputHidden: React.FC<Props> = ({ name, type, value, ...rest }) => {
+  const [field, , helpers] = useField(name)
 
   useEffect(() => {
-    registerField({
-      name: fieldName,
-      ref: inputRef.current,
-      path: 'value',
-    })
-  }, [fieldName, registerField])
+    if (value !== undefined && value !== field.value) {
+      helpers.setValue(value)
+    }
+  }, [field.value, helpers, value])
 
   return (
-    <Container>
-      <input
-        type={type !== 'hidden' ? 'hidden' : type}
-        defaultValue={defaultValue}
-        ref={inputRef}
-        {...rest}
-      />
-    </Container>
+    <input
+      {...field}
+      {...rest}
+      name={name}
+      type={type !== 'hidden' ? 'hidden' : type}
+      value={field.value ?? value ?? ''}
+    />
   )
 }
 

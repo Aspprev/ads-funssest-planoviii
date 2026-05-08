@@ -1,7 +1,7 @@
 import React from 'react'
 import {
-  RouteProps as ReactDOMRouterProps,
   Route as ReactDOMRoute,
+  RouteProps as ReactDOMRouterProps,
 } from 'react-router-dom'
 
 interface RouteProps extends ReactDOMRouterProps {

@@ -62,7 +62,7 @@ const InputRange: React.FC<Props> = ({
   prefix,
   sufix,
 }) => {
-  const handleChange = (e: any) => {
+  const handleChange = (e: any): void => {
     functionChange(e.target.getAttribute('aria-valuenow'))
   }
   useEffect(() => {

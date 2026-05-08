@@ -6,23 +6,8 @@ import Modal from 'react-modal'
 interface ModalProps {
   isOpen: boolean
   onRequestClose: () => void
+  children?: React.ReactNode
 }
-
-/*
- *** COMO CRIAR UM MODAL ***
- * 1º: Crie um state na pagina:
- * const [isModalOpen, setIsModalOpen] = useState(false)
- *
- * 2º: crie uma função para fechar o modal na página:
- * function handleCloseModal(): void {
- *  setIsModalOpen(false)
- * }
- *
- * 3º: Crie o componente (possui children!):
- * <ModalBox isOpen={isModalOpen} onRequestClose={handleCloseModal}>
- *
- * 4º: Seja feliz :D
- */
 
 const ModalBox: React.FC<ModalProps> = ({
   isOpen,
@@ -33,11 +18,15 @@ const ModalBox: React.FC<ModalProps> = ({
     <Modal
       isOpen={isOpen}
       onRequestClose={onRequestClose}
-      overlayClassName="react-modal-overlay"
-      className="react-modal-content"
+      overlayClassName="fixed inset-0 z-20 overflow-y-auto bg-black/55 px-4 py-6"
+      className="relative mx-auto my-auto flex max-h-[calc(100vh-3rem)] w-full max-w-125 flex-col overflow-hidden rounded bg-panel-muted outline-none max-md:max-w-100"
+      ariaHideApp={false}
     >
-      <FiX onClick={onRequestClose} />
-      {children}
+      <FiX
+        className="absolute right-5 top-5 size-5 cursor-pointer text-danger"
+        onClick={onRequestClose}
+      />
+      <div className="overflow-y-auto px-6 py-9">{children}</div>
     </Modal>
   )
 }

@@ -1,15 +1,17 @@
+/* eslint-disable no-console */
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable @typescript-eslint/interface-name-prefix */
+import { filesize } from 'filesize'
 import React, {
   createContext,
-  useState,
-  useEffect,
   useCallback,
   useContext,
+  useEffect,
+  useMemo,
+  useState,
 } from 'react'
+import { AxiosProgressEvent } from 'axios'
 import { v4 as uuidv4 } from 'uuid'
-import filesize from 'filesize'
-
 import api from '../services/api'
 
 export interface IPost {
@@ -23,6 +25,7 @@ export interface IPost {
 export interface IFile {
   id: string
   name: string
+  size?: number
   readableSize: string
   uploaded?: boolean
   preview: string
@@ -35,81 +38,90 @@ export interface IFile {
 interface IFileContextData {
   uploadedFiles: IFile[]
   deleteFile(id: string): void
-  handleUpload(file: any): void
+  handleUpload(files: File[]): void
 }
 
 const FileContext = createContext<IFileContextData>({} as IFileContextData)
 
-const FileProvider: React.FC = ({ children }) => {
+const isBlobPreview = (preview: string): boolean =>
+  preview.startsWith('blob:')
+
+const FileProvider = ({
+  children,
+}: React.PropsWithChildren): React.JSX.Element => {
   const [uploadedFiles, setUploadedFiles] = useState<IFile[]>([])
 
   useEffect(() => {
     api.get<IPost[]>('posts').then(response => {
-      const postFormatted: IFile[] = response.data.map(post => {
-        return {
-          ...post,
-          id: post._id,
-          preview: post.url,
-          readableSize: filesize(post.size),
-          file: null,
-          error: false,
-          uploaded: true,
-        }
-      })
+      const postFormatted: IFile[] = response.data.map(post => ({
+        ...post,
+        id: post._id,
+        preview: post.url,
+        readableSize: filesize(post.size),
+        file: null,
+        error: false,
+        uploaded: true,
+      }))
 
       setUploadedFiles(postFormatted)
     })
   }, [])
 
-  useEffect(() => {
-    return () => {
-      uploadedFiles.forEach(file => URL.revokeObjectURL(file.preview))
-    }
-  })
+  useEffect(
+    () => () => {
+      uploadedFiles.forEach(file => {
+        if (isBlobPreview(file.preview)) {
+          URL.revokeObjectURL(file.preview)
+        }
+      })
+    },
+    [uploadedFiles],
+  )
 
-  const updateFile = useCallback((id, data) => {
-    setUploadedFiles(state =>
-      state.map(file => (file.id === id ? { ...file, ...data } : file)),
-    )
-  }, [])
+  const updateFile = useCallback(
+    (id: string, data: Partial<IFile>) => {
+      setUploadedFiles(state =>
+        state.map(file => (file.id === id ? { ...file, ...data } : file)),
+      )
+    },
+    [],
+  )
 
   const processUpload = useCallback(
     (uploadedFile: IFile) => {
       const data = new FormData()
+
       if (uploadedFile.file) {
         data.append('file', uploadedFile.file, uploadedFile.name)
       }
 
       api
         .post('posts', data, {
-          onUploadProgress: progressEvent => {
-            const progress: number = Math.round(
-              (progressEvent.loaded * 100) / progressEvent.total,
-            )
+          onUploadProgress: (progressEvent: AxiosProgressEvent) => {
+            const total = progressEvent.total || uploadedFile.size || 0
 
-            console.log(
-              `A imagem ${uploadedFile.name} está ${progress}% carregada... `,
-            )
+            if (total <= 0) {
+              updateFile(uploadedFile.id, { progress: 100 })
+              return
+            }
 
+            const progress = Math.round((progressEvent.loaded * 100) / total)
             updateFile(uploadedFile.id, { progress })
           },
         })
         .then(response => {
-          console.log(
-            `A imagem ${uploadedFile.name} já foi enviada para o servidor!`,
-          )
-
           updateFile(uploadedFile.id, {
             uploaded: true,
             id: response.data._id,
             url: response.data.url,
+            progress: 100,
           })
         })
         .catch(err => {
           console.error(
-            `Houve um problema para fazer upload da imagem ${uploadedFile.name} no servidor AWS`,
+            `Houve um problema ao fazer upload da imagem ${uploadedFile.name} para o servidor.`,
           )
-          console.log(err)
+          console.error(err)
 
           updateFile(uploadedFile.id, {
             error: true,
@@ -121,11 +133,11 @@ const FileProvider: React.FC = ({ children }) => {
 
   const handleUpload = useCallback(
     (files: File[]) => {
-      console.log('teste')
-      const newUploadedFiles: IFile[] = files.map((file: File) => ({
+      const newUploadedFiles: IFile[] = files.map(file => ({
         file,
         id: uuidv4(),
         name: file.name,
+        size: file.size,
         readableSize: filesize(file.size),
         preview: URL.createObjectURL(file),
         progress: 0,
@@ -134,8 +146,6 @@ const FileProvider: React.FC = ({ children }) => {
         url: '',
       }))
 
-      // concat é mais performático que ...spread
-      // https://www.malgol.com/how-to-merge-two-arrays-in-javascript/
       setUploadedFiles(state => state.concat(newUploadedFiles))
       newUploadedFiles.forEach(processUpload)
     },
@@ -143,14 +153,28 @@ const FileProvider: React.FC = ({ children }) => {
   )
 
   const deleteFile = useCallback((id: string) => {
-    api.delete(`posts/${id}`)
-    setUploadedFiles(state => state.filter(file => file.id !== id))
+    setUploadedFiles(state => {
+      const fileToDelete = state.find(file => file.id === id)
+
+      if (fileToDelete?.uploaded) {
+        api.delete(`posts/${id}`)
+      }
+
+      if (fileToDelete && isBlobPreview(fileToDelete.preview)) {
+        URL.revokeObjectURL(fileToDelete.preview)
+      }
+
+      return state.filter(file => file.id !== id)
+    })
   }, [])
 
+  const contextValue = useMemo(
+    () => ({ uploadedFiles, deleteFile, handleUpload }),
+    [deleteFile, handleUpload, uploadedFiles],
+  )
+
   return (
-    <FileContext.Provider value={{ uploadedFiles, deleteFile, handleUpload }}>
-      {children}
-    </FileContext.Provider>
+    <FileContext.Provider value={contextValue}>{children}</FileContext.Provider>
   )
 }
 

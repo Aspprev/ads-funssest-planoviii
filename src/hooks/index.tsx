@@ -2,7 +2,9 @@ import React from 'react'
 
 import { AuthProvider } from './auth'
 
-const AppProvider: React.FC = ({ children }) => (
+const AppProvider = ({
+  children,
+}: React.PropsWithChildren): React.JSX.Element => (
   <AuthProvider>{children}</AuthProvider>
 )
 export default AppProvider

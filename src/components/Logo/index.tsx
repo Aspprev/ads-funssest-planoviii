@@ -1,9 +1,8 @@
 import React from 'react'
-import { Container } from './styles'
 import logoImage from '../../assets/logo-funssest.png'
 
 const Logo: React.FC = () => {
-  return <Container src={logoImage} alt="Aspprev" />
+  return <img className="h-full py-1 md:py-2" src={logoImage} alt="Aspprev" />
 }
 
 export default Logo

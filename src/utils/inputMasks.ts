@@ -1,5 +1,29 @@
 
-interface Event extends React.FormEvent<HTMLInputElement> { }
+interface Event extends React.FormEvent<HTMLInputElement> {}
+
+export type InputMaskType =
+  | 'cep'
+  | 'conta'
+  | 'currency'
+  | 'currencyV'
+  | 'cpf'
+  | 'phone'
+  | 'date'
+  | 'percent'
+
+export const applyInputMask = (
+  type: InputMaskType,
+  inputValue: string,
+): string => {
+  const createEvent = {
+    currentTarget: {
+      value: inputValue,
+      maxLength: 0,
+    },
+  } as Event
+
+  return (masks[type] || masks.default)(createEvent).currentTarget.value
+}
 
 const cpf = (e: Event) => {
   e.currentTarget.maxLength = 14
@@ -109,25 +133,23 @@ const percent = (e: Event) => {
   return e
 }
 
+const masks = {
+  cep: (event: Event) => cep(event),
+  currency: (event: Event) => currency(event),
+  currencyV: (event: Event) => currencyV(event),
+  cpf: (event: Event) => cpf(event),
+  conta: (event: Event) => conta(event),
+  phone: (event: Event) => phone(event),
+  date: (event: Event) => date(event),
+  percent: (event: Event) => percent(event),
+  default: (event: Event) => event,
+}
+
 interface MaskFunctionValues {
-  type: 'cep' | 'conta' | 'currency' | 'currencyV' | 'cpf' | 'phone' | 'date' | 'percent',
+  type: InputMaskType
   event: Event
 }
 
 export default ({ type, event }: MaskFunctionValues): Event => {
-
-  const masks = {
-    cep: (event: Event) => cep(event),
-    currency: (event: Event) => currency(event),
-    currencyV: (event: Event) => currencyV(event),
-    cpf: (event: Event) => cpf(event),
-    conta: (event: Event) => conta(event),
-    phone: (event: Event) => phone(event),
-    date: (event: Event) => date(event),
-    percent: (event: Event) => percent(event),
-
-    default: event
-  }
-
-  return (masks[type] || masks['default'])(event)
+  return (masks[type] || masks.default)(event)
 }

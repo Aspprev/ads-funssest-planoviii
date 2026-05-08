@@ -1,40 +1,43 @@
 /* eslint-disable no-nested-ternary */
-/* eslint-disable no-alert */
-import React, { useState, useEffect, useCallback, useRef } from 'react'
-import { useHistory } from 'react-router-dom'
+import { Form, Formik } from 'formik'
 import { Base64 } from 'js-base64'
-import { CircularProgress } from '@material-ui/core'
-import { FiAlertCircle } from 'react-icons/fi'
-import { FormHandles } from '@unform/core'
-import { Form } from '@unform/web'
-import Collapse from '@material-ui/core/Collapse'
+import React, { useCallback, useEffect, useState } from 'react'
+import { FiAlertCircle, FiArrowLeft } from 'react-icons/fi'
+import { useHistory } from 'react-router-dom'
+import BackButton from '../../components/BackButton'
+import Button from '../../components/Button'
+import Collapse from '../../components/Collapse'
+import InputSMSCode from '../../components/InputSMSCode'
+import ModalBox from '../../components/Modal'
+import ModalActionButton from '../../components/ModalActionButton'
+import PageCard from '../../components/PageCard'
+import PageLayout from '../../components/PageLayout'
+import Spinner from '../../components/Spinner'
+import useConfigData from '../../hooks/useConfigData'
 import usePersistedState from '../../hooks/usePersistedState'
 import api from '../../services/api'
-import Header from '../../components/Header'
-import Button from '../../components/Button'
+import { persistErrorAndRedirect } from '../../utils/apiError'
+import { sanitizeCpf, sanitizePhone, scrollToTop } from '../../utils/browser'
 import {
-  ConfigData,
+  removeStorageItems,
+} from '../../utils/storage'
+import {
+  ErroProps,
+  Participant,
   UserData,
   UserDetails,
-  Participant,
-  ErroProps,
 } from '../../utils/interfaces'
-import {
-  Container,
-  Content,
-  BtnVoltar,
-  AlertContent,
-  Timer,
-  BtnModal,
-} from './styles'
-import ModalBox from '../../components/Modal'
-import InputSMSCode from '../../components/InputSMSCode'
+
+interface ConfirmationCodeValues {
+  codeSMS: string
+}
+
+const Timer = ({ children }: React.PropsWithChildren): React.JSX.Element => (
+  <span className="my-3 text-xs text-brand-400 md:text-sm">{children}</span>
+)
 
 const Conclusion: React.FC = () => {
-  const [configData, setConfigData] = usePersistedState<ConfigData>(
-    'configData',
-    {} as ConfigData,
-  )
+  const [configData, setConfigData] = useConfigData()
   const [userData] = usePersistedState<UserData>('userData', {} as UserData)
   const [userDetails] = usePersistedState<UserDetails>(
     'userDetails',
@@ -49,7 +52,6 @@ const Conclusion: React.FC = () => {
     [],
   )
   const [flagAssistencial] = usePersistedState('flagAssistencial', '')
-
   const [, setErroProps] = usePersistedState<ErroProps>(
     'erroProps',
     {} as ErroProps,
@@ -59,35 +61,46 @@ const Conclusion: React.FC = () => {
   const [reSend, setReSend] = useState(false)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [warningText, setWarningText] = useState('')
-  const contato = configData.tipoContato === 'S' ? 'SMS' : 'e-mail'
   const [open, setOpen] = useState(false)
+  const [formKey, setFormKey] = useState(0)
   const [sizeCode] = useState(4)
-
-  const formRef = useRef<FormHandles>(null)
-
-  function handleCloseModal(): void {
-    setIsModalOpen(false)
-  }
+  const contato = configData.tipoContato === 'S' ? 'SMS' : 'e-mail'
   const history = useHistory()
+
+  const handleCloseModal = useCallback(() => {
+    setIsModalOpen(false)
+  }, [])
+
+  const resetCodeInput = useCallback(() => {
+    setOpen(false)
+    setFormKey(current => current + 1)
+  }, [])
+
+  const redirectMissingToken = useCallback(() => {
+    setErroProps({
+      title: 'Não foi possível validar o código',
+      description: 'Sua sessão de autenticação expirou. Revise seus dados e solicite um novo código.',
+    })
+    history.push('/resume')
+  }, [history, setErroProps])
 
   const handleConfirmaAdesao = useCallback(async () => {
     setAguarde(true)
+
     const parametros = Base64.encode(
       `{
         "token": "${configData.token}",
         "versao": "${configData.tipo}",
         "plano": "${configData.plano}",
-        "nome": "${userData.name.toLowerCase()}",
-        "cpf": "${userData.cpf.replaceAll('.', '').replace('-', '')}",
-        "nascimento": "${userData.birthdate}",
-        "admissao":"${userData.admission}",
-        "email": "${userData.email}",
-        "telefone": "55${userData.phone
-          .replace('(', '')
-          .replace(') ', '')
-          .replace('-', '')}",
-        "patrocinadora":"${userData.patrocinadora}",
-        "nomeMae": "${userData.parental.toLowerCase()}",
+        "cliente": "${configData.codCliente}",
+        "nome": "${(userData.name ?? '').toLowerCase()}",
+        "cpf": "${sanitizeCpf(userData.cpf)}",
+        "nascimento": "${userData.birthdate ?? ''}",
+        "admissao":"${userData.admission ?? ''}",
+        "email": "${userData.email ?? ''}",
+        "telefone": "55${sanitizePhone(userData.phone)}",
+        "patrocinadora":"${userData.patrocinadora ?? ''}",
+        "nomeMae": "${(userData.parental ?? '').toLowerCase()}",
         "salario": "${userDetails.salario}",
         "valor": "${userDetails.contribuicaoBasica
           .toString()
@@ -115,9 +128,7 @@ const Conclusion: React.FC = () => {
         "politicamenteexposto": "${userDetails.ppe}",
         "usperson": "${userDetails.usperson}",
         "perfilInvest": "${userDetails.investor}",
-        "forma_resgate": "${
-          selectedReceive === undefined ? '' : selectedReceive
-        }",
+        "forma_resgate": "${selectedReceive ?? ''}",
         "assistencial":"${flagAssistencial}",
         "beneficiarios": [${participants.map(
           participant => `
@@ -129,7 +140,7 @@ const Conclusion: React.FC = () => {
               : participant.details.grauParentesco
           }",
           "tipo":"${participant.details.tipoBen}",
-          "cpf": "${participant.data.cpf.replaceAll('.', '').replace('-', '')}",
+          "cpf": "${sanitizeCpf(participant.data.cpf)}",
           "mrcInvalidez":"${
             participant.details.mrcInvalidez === undefined
               ? ''
@@ -141,108 +152,144 @@ const Conclusion: React.FC = () => {
               : participant.details.proporcao.toString().replace('.', ',')
           }"}`,
         )}]
-        }`,
+      }`,
     )
 
     const parametrosFinal = Base64.encode(parametros)
 
-    // history.push('/end')
+    try {
+      await api.post(`wsAdesao.rule?sys=ADZ&Entrada=${parametrosFinal}`)
 
-    await api
-      .post(`wsAdesao.rule?sys=ADZ&Entrada=${parametrosFinal}`)
-      .then(() => {
-        localStorage.removeItem('@Funssest:configData')
-        localStorage.removeItem('@Funssest:participantsGroup')
-        localStorage.removeItem('@Funssest:PercentualValuePercent')
-        localStorage.removeItem('@Funssest:receiveTypeSelected')
-        localStorage.removeItem('@Funssest:TimeValueYears')
-        localStorage.removeItem('@Funssest:totalBalance')
-        localStorage.removeItem('@Funssest:userData')
-        localStorage.removeItem('@Funssest:userDetails')
-        localStorage.removeItem('@Funssest:erroProps')
-        localStorage.removeItem('@Funssest:acceptTerms')
-        localStorage.removeItem('@Funssest:RendaFixaValue')
-        localStorage.removeItem('@Funssest:flagEdit')
-        localStorage.removeItem('@Funssest:aportAccept')
-        localStorage.removeItem('@Funssest:aportFlag')
-        localStorage.removeItem('@Funssest:flagAssistencial')
-        localStorage.removeItem('@Funssest:flagTubarao')
+      removeStorageItems([
+        'configData',
+        'participantsGroup',
+        'PercentualValuePercent',
+        'receiveTypeSelected',
+        'TimeValueYears',
+        'totalBalance',
+        'userData',
+        'userDetails',
+        'erroProps',
+        'acceptTerms',
+        'RendaFixaValue',
+        'flagEdit',
+        'aportAccept',
+        'aportFlag',
+        'flagAssistencial',
+        'flagTubarao',
+      ])
 
-        history.push('/end')
-      })
-      .catch(res => {
-        if (res.message === 'Request failed with status code 401') {
-          alert('Tempo de sessão expirado')
-          history.push('/register')
-        } else if (res.message === 'Request failed with status code 406') {
-          setWarningText(
-            'Adesão não autorizada. Verifique se você já possui cadastro no plano.',
-          )
-          setIsModalOpen(true)
-          setReSend(false)
-          setTimer(20)
-          setAguarde(false)
-        } else if (res.message === 'Network Error') {
-          setErroProps({
-            title: res.message,
-            description: 'Falha na conexão como servidor',
-          })
-          history.push('/erro')
-        } else if (res.message === 'Request failed with status code 500') {
-          setErroProps({
-            title: 'Erro interno no servidor',
-            description: res.message,
-          })
-          history.push('/erro')
-        } else if (res.message === 'Request failed with status code 408') {
-          alert('Tempo de sessão expirado')
-          history.push('/register')
-        } else {
-          setReSend(false)
-          setTimer(20)
-          setAguarde(false)
-          setWarningText('Ops, algo deu errado. Tente novamente mais tarde.')
-          setIsModalOpen(true)
-        }
-      })
+      history.push('/end')
+    } catch (error) {
+      const status =
+        error && typeof error === 'object' && 'response' in error
+          ? (error as { response?: { status?: number } }).response?.status
+          : undefined
+
+      if (status === 401 || status === 408) {
+        setErroProps({
+          title: 'Sessão expirada',
+          description: 'Sua sessão expirou. Preencha seus dados novamente para continuar.',
+        })
+        setAguarde(false)
+        history.push('/register')
+        return
+      }
+
+      if (status === 406) {
+        setWarningText(
+          'Adesão não autorizada. Verifique se você já possui cadastro no plano.',
+        )
+        setIsModalOpen(true)
+        setReSend(false)
+        setTimer(20)
+        setAguarde(false)
+        return
+      }
+
+      setReSend(false)
+      setTimer(20)
+      setAguarde(false)
+
+      if (status && status < 500) {
+        setWarningText('Ops, algo deu errado. Tente novamente mais tarde.')
+        setIsModalOpen(true)
+        return
+      }
+
+      persistErrorAndRedirect(history, setErroProps, error)
+    }
   }, [
     configData,
+    flagAssistencial,
     history,
     participants,
     selectedReceive,
     setErroProps,
     userData,
     userDetails,
-    flagAssistencial,
   ])
 
   const handleConfirmaCodigo = useCallback(
-    async data => {
-      if (data.codeSMS.length === sizeCode) {
-        const parametros = Base64.encode(
-          `{"token": "${configData.token}",
+    async (data: ConfirmationCodeValues) => {
+      if (data.codeSMS.length !== sizeCode) {
+        return
+      }
+
+      setAguarde(true)
+
+      const currentToken = configData.token
+
+      if (!currentToken) {
+        setAguarde(false)
+        redirectMissingToken()
+        return
+      }
+
+      const parametros = Base64.encode(
+        `{"token": "${currentToken}",
           "codigoValidador": "${data.codeSMS}",
           "cliente": "${configData.codCliente}"}`,
+      )
+
+      const parametrosFinal = Base64.encode(parametros)
+
+      try {
+        const res = await api.post(
+          `wsAutenticacaoV5.rule?sys=ADZ&Entrada=${parametrosFinal}`,
         )
 
-        const parametrosFinal = Base64.encode(parametros)
+        setConfigData(current => ({
+          ...current,
+          token: res.data?.token ?? current.token,
+        }))
+        await handleConfirmaAdesao()
+      } catch (error) {
+        const status =
+          error && typeof error === 'object' && 'response' in error
+            ? (error as { response?: { status?: number } }).response?.status
+            : undefined
 
-        await api
-          .post(`wsAutenticacao.rule?sys=ADZ&Entrada=${parametrosFinal}`)
-          .then(() => {
-            handleConfirmaAdesao()
-          })
-          .catch(res => {
-            if (res.message === 'Request failed with status code 401') {
-              setOpen(true)
-            } else {
-              // eslint-disable-next-line no-alert
-              alert('Ops, algo deu errado. Tente novamente mais tarde.')
-            }
-          })
+        if (status === 401) {
+          setOpen(true)
+          setAguarde(false)
+          return
+        }
+
+        setAguarde(false)
+        persistErrorAndRedirect(history, setErroProps, error)
       }
     },
-    [configData.codCliente, configData.token, handleConfirmaAdesao, sizeCode],
+    [
+      configData.codCliente,
+      configData.token,
+      handleConfirmaAdesao,
+      history,
+      redirectMissingToken,
+      setConfigData,
+      setErroProps,
+      sizeCode,
+    ],
   )
 
   const handleReSend = useCallback(async () => {
@@ -250,127 +297,160 @@ const Conclusion: React.FC = () => {
       `{"versao":"${configData.tipo}",
         "plano": "${configData.plano}",
         "cliente":"${configData.codCliente}",
-        "cpf":"${
-          userData.cpf === undefined
-            ? ''
-            : userData.cpf.replaceAll('.', '').replace('-', '')
-        }",
-        "email":"${userData.email === undefined ? '' : userData.email}",
-        "telefone":"${
-          userData.phone === undefined
-            ? ''
-            : `55${userData.phone
-                .replace('(', '')
-                .replace(') ', '')
-                .replace('-', '')}`
-        }",
-        "admissao":"${userData.admission}",
+        "cpf":"${sanitizeCpf(userData.cpf)}",
+        "email":"${userData.email ?? ''}",
+        "telefone":"55${sanitizePhone(userData.phone)}",
+        "patrocinadora":"${userData.patrocinadora ?? ''}",
+        "admissao":"${userData.admission ?? ''}",
         "envio":"${configData.tipoContato}"}`,
     )
 
     const parametrosFinalGet = Base64.encode(parametrosGet)
 
-    await api
-      .get(`wsAutenticacao.rule?sys=ADZ&Entrada=${parametrosFinalGet}`)
-      .then(res =>
-        setConfigData({
-          ...configData,
-          token: res.data.token,
-        }),
+    try {
+      const res = await api.get(
+        `wsAutenticacaoV5.rule?sys=ADZ&Entrada=${parametrosFinalGet}`,
       )
-      .catch(() => alert('Ops, algo deu errado. Tente novamente mais tarde.'))
+      const nextToken = res.data?.token
 
-    history.push('/register/confirm-sms')
+      if (!nextToken) {
+        redirectMissingToken()
+        return
+      }
 
-    setReSend(false)
-    setTimer(60)
-    window.location.reload()
-  }, [userData, configData, history, setConfigData])
+      setConfigData(current => ({
+        ...current,
+        token: nextToken,
+      }))
+      setReSend(false)
+      setTimer(60)
+      setAguarde(false)
+      resetCodeInput()
+    } catch (error) {
+      setAguarde(false)
+      persistErrorAndRedirect(history, setErroProps, error)
+    }
+  }, [
+    configData.codCliente,
+    configData.plano,
+    configData.tipo,
+    configData.tipoContato,
+    history,
+    redirectMissingToken,
+    resetCodeInput,
+    setConfigData,
+    setErroProps,
+    userData.admission,
+    userData.cpf,
+    userData.email,
+    userData.phone,
+  ])
 
   useEffect(() => {
-    const countTimer = (): void => {
-      if (timer > 1) {
-        setTimer(timer - 1)
-      } else if (timer === 1) {
-        setTimer(timer - 1)
-        setReSend(true)
-      }
+    if (timer <= 0) {
+      setReSend(true)
+      return
     }
 
-    const interval = setInterval(countTimer, 1000)
+    const interval = window.setInterval(() => {
+      setTimer(current => {
+        if (current <= 1) {
+          window.clearInterval(interval)
+          setReSend(true)
+          return 0
+        }
 
-    return () => clearInterval(interval)
+        return current - 1
+      })
+    }, 1000)
+
+    return () => window.clearInterval(interval)
   }, [timer])
 
   useEffect(() => {
-    window.scrollTo({ top: 0, left: 0, behavior: 'smooth' })
+    scrollToTop()
   }, [])
 
   return (
-    <>
-      <Header />
-      <Container>
-        <Content>
-          <strong>Confirmação de Adesão</strong>
-          <span>
-            Eu <b style={{ textTransform: 'uppercase' }}>{userData.name}</b>,
-            inscrito no CPF <b>{userData.cpf}</b>, declaro que ao{' '}
-            <b>preencher o código validador</b>, confirmo minha adesão ao{' '}
-            <b>Plano V Funssest</b> e que as informações prestadas são
-            verídicas.
-          </span>
-          <Form ref={formRef} onSubmit={handleConfirmaCodigo}>
-            <InputSMSCode name="codeSMS" size={sizeCode} formRef={formRef} />
+    <PageLayout containerClassName="mb-0 max-md:max-w-[500px]">
+      <PageCard className="flex flex-col items-center px-0 py-4">
+        <strong className="text-center text-lg font-bold text-brand-400">
+          Confirmação de adesão
+        </strong>
+        <span className="mt-3 px-6 text-center text-base text-ink-900">
+          Eu <b style={{ textTransform: 'uppercase' }}>{userData.name}</b>,
+          inscrito no CPF <b>{userData.cpf}</b>, declaro que, ao{' '}
+          <b>preencher o código validador</b>, confirmo minha adesão ao{' '}
+          <b>Plano VIII Funssest</b> e que as informações prestadas são
+          verídicas.
+        </span>
+        <Formik<ConfirmationCodeValues>
+          key={formKey}
+          initialValues={{ codeSMS: '' }}
+          onSubmit={handleConfirmaCodigo}
+        >
+          <Form className="my-6">
+            <InputSMSCode name="codeSMS" size={sizeCode} />
           </Form>
+        </Formik>
 
-          <Collapse in={open}>
-            <AlertContent>
-              <div>
-                <FiAlertCircle />
-                <p>Código incorreto!</p>
-              </div>
-              <button type="button" onClick={() => window.location.reload()}>
-                Limpar
-              </button>
-            </AlertContent>
-          </Collapse>
-          {aguarde ? (
-            <>
-              <CircularProgress color="inherit" />
-              <span>Aguarde</span>
-            </>
-          ) : (
-            <>
-              <Timer>00:{timer < 10 ? `0${timer}` : timer}</Timer>
-              <p>Não está recebendo o código? Sem problemas!</p>
-              <p>
-                Clique em <strong>reenviar</strong> para receber um novo código
-                via {contato}
-              </p>
-              <Button
-                onClick={handleReSend}
-                type="button"
-                color="white"
-                disabled={!reSend}
-                fontSize="small"
-              >
-                Reenviar
-              </Button>
-            </>
-          )}
-        </Content>
-        <BtnVoltar type="button" onClick={() => history.push('resume')}>
-          Quero trocar a forma de contato
-        </BtnVoltar>
+        <Collapse in={open}>
+          <div className="relative mb-3 flex max-w-60 flex-col items-center rounded-sm p-2 font-bold text-danger">
+            <div className="mb-1 flex max-w-50 items-center justify-between">
+              <FiAlertCircle className="absolute text-[20px]" />
+              <p className="pl-7 text-sm">Código incorreto.</p>
+            </div>
+            <button
+              className="border-0 bg-transparent text-xs text-ink-900"
+              type="button"
+              onClick={resetCodeInput}
+            >
+              Limpar
+            </button>
+          </div>
+        </Collapse>
+        {aguarde ? (
+          <>
+            <Spinner />
+            <span>Aguarde</span>
+          </>
+        ) : (
+          <>
+            <Timer>00:{timer < 10 ? `0${timer}` : timer}</Timer>
+            <p className="w-9/10 text-center text-sm leading-5">
+              Não está recebendo o código? Sem problemas!
+            </p>
+            <p className="mb-3 w-9/10 text-center text-sm leading-5">
+              Clique em <strong>reenviar</strong> para receber um novo código
+              via {contato}.
+            </p>
+            <Button
+              onClick={handleReSend}
+              type="button"
+              color="orange"
+              disabled={!reSend}
+              fontSize="normal"
+            >
+              Reenviar
+            </Button>
+          </>
+        )}
+      </PageCard>
+      <BackButton
+        type="button"
+        className="m-4"
+        onClick={() => history.push('/resume')}
+      >
+        <FiArrowLeft /> Quero trocar a forma de contato
+      </BackButton>
 
-        <ModalBox isOpen={isModalOpen} onRequestClose={handleCloseModal}>
-          <p>{warningText}</p>
-          <BtnModal isActive onClick={() => history.push('/resume')}>
-            Ok
-          </BtnModal>
-        </ModalBox>
-      </Container>
-    </>
+      <ModalBox isOpen={isModalOpen} onRequestClose={handleCloseModal}>
+        <p>{warningText}</p>
+        <ModalActionButton onClick={() => history.push('/resume')}>
+          Ok
+        </ModalActionButton>
+      </ModalBox>
+    </PageLayout>
   )
 }
 
