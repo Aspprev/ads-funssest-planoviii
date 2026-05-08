@@ -1,0 +1,394 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="225.633" height="194.073" viewBox="0 0 225.633 194.073">
+  <defs>
+    <linearGradient id="linear-gradient" x1="1.052" x2="0.248" y2="1.024" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#82c3fb"/>
+      <stop offset="1" stop-color="#626be6"/>
+    </linearGradient>
+    <filter id="bg" x="13.522" y="72.774" width="62.553" height="53.491" filterUnits="userSpaceOnUse">
+      <feOffset dy="12" input="SourceAlpha"/>
+      <feGaussianBlur stdDeviation="6" result="blur"/>
+      <feFlood flood-color="#8493f4" flood-opacity="0.471"/>
+      <feComposite operator="in" in2="blur"/>
+      <feComposite in="SourceGraphic"/>
+    </filter>
+    <linearGradient id="linear-gradient-2" x1="0.559" y1="-0.113" x2="0.493" y2="1" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#84f6bb"/>
+      <stop offset="1" stop-color="#22b989"/>
+    </linearGradient>
+    <linearGradient id="linear-gradient-3" x1="0.336" x2="0.928" y2="0.898" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#76edaa"/>
+      <stop offset="1" stop-color="#25b889"/>
+    </linearGradient>
+    <linearGradient id="linear-gradient-4" x1="0.845" y1="-0.118" x2="0.243" y2="0.836" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#7ef192"/>
+      <stop offset="1" stop-color="#2dc897"/>
+    </linearGradient>
+    <linearGradient id="linear-gradient-5" x1="1" y1="0.116" x2="0.168" y2="0.925" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#cd7b92"/>
+      <stop offset="1" stop-color="#1f3168"/>
+    </linearGradient>
+    <filter id="_3" x="66.43" y="139.389" width="93.346" height="39.847" filterUnits="userSpaceOnUse">
+      <feOffset dy="8" input="SourceAlpha"/>
+      <feGaussianBlur stdDeviation="4" result="blur-2"/>
+      <feFlood flood-color="#d1d4e2" flood-opacity="0.4"/>
+      <feComposite operator="in" in2="blur-2"/>
+      <feComposite in="SourceGraphic"/>
+    </filter>
+    <linearGradient id="linear-gradient-6" x1="1" y1="0.116" x2="0.169" y2="0.925" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#ffbbcf"/>
+      <stop offset="1" stop-color="#a665d1"/>
+    </linearGradient>
+    <filter id="_2" x="66.43" y="119.58" width="93.346" height="39.847" filterUnits="userSpaceOnUse">
+      <feOffset dy="8" input="SourceAlpha"/>
+      <feGaussianBlur stdDeviation="4" result="blur-3"/>
+      <feFlood flood-color="#d1d4e2" flood-opacity="0.4"/>
+      <feComposite operator="in" in2="blur-3"/>
+      <feComposite in="SourceGraphic"/>
+    </filter>
+    <linearGradient id="linear-gradient-7" x1="1" y1="0.145" x2="0.133" y2="1" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#9cb5ff"/>
+      <stop offset="1" stop-color="#7a71ef"/>
+    </linearGradient>
+    <filter id="Path" x="67.509" y="117.222" width="46.451" height="46.45" filterUnits="userSpaceOnUse">
+      <feOffset dy="12" input="SourceAlpha"/>
+      <feGaussianBlur stdDeviation="7" result="blur-4"/>
+      <feFlood flood-color="#d1d4e2"/>
+      <feComposite operator="in" in2="blur-4"/>
+      <feComposite in="SourceGraphic"/>
+    </filter>
+    <filter id="_1" x="66.43" y="100.432" width="93.346" height="39.187" filterUnits="userSpaceOnUse">
+      <feOffset dy="8" input="SourceAlpha"/>
+      <feGaussianBlur stdDeviation="4" result="blur-5"/>
+      <feFlood flood-color="#d1d4e2" flood-opacity="0.4"/>
+      <feComposite operator="in" in2="blur-5"/>
+      <feComposite in="SourceGraphic"/>
+    </filter>
+    <filter id="Rectangle_Copy_11" x="71.959" y="99.394" width="43.981" height="49.263" filterUnits="userSpaceOnUse">
+      <feOffset dy="12" input="SourceAlpha"/>
+      <feGaussianBlur stdDeviation="7" result="blur-6"/>
+      <feFlood flood-color="#d1d4e2" flood-opacity="0.4"/>
+      <feComposite operator="in" in2="blur-6"/>
+      <feComposite in="SourceGraphic"/>
+    </filter>
+    <linearGradient id="linear-gradient-8" x1="1.05" y1="0.074" x2="0.174" y2="0.874" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#ffac92"/>
+      <stop offset="1" stop-color="#f85e7a"/>
+    </linearGradient>
+    <filter id="Rectangle_Copy_7" x="71.959" y="104.676" width="43.981" height="43.981" filterUnits="userSpaceOnUse">
+      <feOffset dy="12" input="SourceAlpha"/>
+      <feGaussianBlur stdDeviation="7" result="blur-7"/>
+      <feFlood flood-color="#d1d4e2" flood-opacity="0.4"/>
+      <feComposite operator="in" in2="blur-7"/>
+      <feComposite in="SourceGraphic"/>
+    </filter>
+    <filter id="Rectangle_Copy_8" x="69.318" y="102.035" width="43.981" height="46.622" filterUnits="userSpaceOnUse">
+      <feOffset dy="12" input="SourceAlpha"/>
+      <feGaussianBlur stdDeviation="7" result="blur-8"/>
+      <feFlood flood-color="#d1d4e2" flood-opacity="0.4"/>
+      <feComposite operator="in" in2="blur-8"/>
+      <feComposite in="SourceGraphic"/>
+    </filter>
+    <filter id="Rectangle_Copy_2" x="66.676" y="103.355" width="43.981" height="45.302" filterUnits="userSpaceOnUse">
+      <feOffset dy="12" input="SourceAlpha"/>
+      <feGaussianBlur stdDeviation="7" result="blur-9"/>
+      <feFlood flood-color="#d1d4e2" flood-opacity="0.4"/>
+      <feComposite operator="in" in2="blur-9"/>
+      <feComposite in="SourceGraphic"/>
+    </filter>
+    <filter id="Rectangle_Copy_4" x="64.034" y="99.394" width="43.981" height="49.263" filterUnits="userSpaceOnUse">
+      <feOffset dy="12" input="SourceAlpha"/>
+      <feGaussianBlur stdDeviation="7" result="blur-10"/>
+      <feFlood flood-color="#d1d4e2" flood-opacity="0.4"/>
+      <feComposite operator="in" in2="blur-10"/>
+      <feComposite in="SourceGraphic"/>
+    </filter>
+    <filter id="Rectangle_Copy" x="64.034" y="100.714" width="43.981" height="47.943" filterUnits="userSpaceOnUse">
+      <feOffset dy="12" input="SourceAlpha"/>
+      <feGaussianBlur stdDeviation="7" result="blur-11"/>
+      <feFlood flood-color="#d1d4e2" flood-opacity="0.4"/>
+      <feComposite operator="in" in2="blur-11"/>
+      <feComposite in="SourceGraphic"/>
+    </filter>
+    <linearGradient id="linear-gradient-12" x1="1.059" y1="-0.068" x2="0.185" y2="0.879" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#ffb382"/>
+      <stop offset="1" stop-color="#f07590"/>
+    </linearGradient>
+    <filter id="Rectangle_Copy_10" x="61.392" y="104.016" width="43.981" height="44.641" filterUnits="userSpaceOnUse">
+      <feOffset dy="12" input="SourceAlpha"/>
+      <feGaussianBlur stdDeviation="7" result="blur-12"/>
+      <feFlood flood-color="#d1d4e2" flood-opacity="0.4"/>
+      <feComposite operator="in" in2="blur-12"/>
+      <feComposite in="SourceGraphic"/>
+    </filter>
+    <filter id="Rectangle_Copy_13" x="66.43" y="32.421" width="93.346" height="86.728" filterUnits="userSpaceOnUse">
+      <feOffset dy="8" input="SourceAlpha"/>
+      <feGaussianBlur stdDeviation="4" result="blur-13"/>
+      <feFlood flood-color="#d1d4e2" flood-opacity="0.4"/>
+      <feComposite operator="in" in2="blur-13"/>
+      <feComposite in="SourceGraphic"/>
+    </filter>
+    <filter id="Path_6_Copy" x="72.171" y="68.917" width="81.639" height="25.687" filterUnits="userSpaceOnUse">
+      <feOffset dy="4" input="SourceAlpha"/>
+      <feGaussianBlur stdDeviation="2" result="blur-14"/>
+      <feFlood flood-color="#8ea5b4" flood-opacity="0.302"/>
+      <feComposite operator="in" in2="blur-14"/>
+      <feComposite in="SourceGraphic"/>
+    </filter>
+    <filter id="Path_6" x="72.264" y="56.285" width="81.228" height="29.879" filterUnits="userSpaceOnUse">
+      <feOffset dy="4" input="SourceAlpha"/>
+      <feGaussianBlur stdDeviation="2" result="blur-15"/>
+      <feFlood flood-color="#8ea5b4" flood-opacity="0.302"/>
+      <feComposite operator="in" in2="blur-15"/>
+      <feComposite in="SourceGraphic"/>
+    </filter>
+    <filter id="Value_Copy_10" x="117.284" y="46.268" width="43.753" height="33.566" filterUnits="userSpaceOnUse">
+      <feOffset dy="6" input="SourceAlpha"/>
+      <feGaussianBlur stdDeviation="4" result="blur-16"/>
+      <feFlood flood-color="#c4d4df" flood-opacity="0.302"/>
+      <feComposite operator="in" in2="blur-16"/>
+      <feComposite in="SourceGraphic"/>
+    </filter>
+    <linearGradient id="linear-gradient-13" x1="0.661" y1="0.045" x2="0.403" y2="1" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#3d3a83"/>
+      <stop offset="1" stop-color="#292452"/>
+    </linearGradient>
+    <filter id="Feet" x="151.916" y="118.887" width="34.408" height="63.91" filterUnits="userSpaceOnUse">
+      <feOffset dy="3" input="SourceAlpha"/>
+      <feGaussianBlur result="blur-17"/>
+      <feFlood flood-opacity="0.302"/>
+      <feComposite operator="in" in2="blur-17"/>
+      <feComposite in="SourceGraphic"/>
+    </filter>
+    <linearGradient id="linear-gradient-14" x1="0.5" y1="-0.105" x2="0.5" y2="1.133" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#8e6565"/>
+      <stop offset="1" stop-color="#3e2e27"/>
+    </linearGradient>
+    <linearGradient id="linear-gradient-15" x1="0.917" y1="-0.083" x2="0.556" y2="1.033" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#c38ffe"/>
+      <stop offset="1" stop-color="#6f7af7"/>
+    </linearGradient>
+    <filter id="right-hand" x="167.142" y="87.681" width="43.694" height="67.649" filterUnits="userSpaceOnUse">
+      <feOffset dy="12" input="SourceAlpha"/>
+      <feGaussianBlur stdDeviation="6" result="blur-18"/>
+      <feFlood flood-color="#8493f4" flood-opacity="0.302"/>
+      <feComposite operator="in" in2="blur-18"/>
+      <feComposite in="SourceGraphic"/>
+    </filter>
+    <linearGradient id="linear-gradient-16" x1="0.5" y1="0.473" x2="1.149" y2="0.545" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#6d6ee5"/>
+      <stop offset="1" stop-color="#ba79d7" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="linear-gradient-17" x1="0.916" y1="-0.083" x2="0.555" y2="1.033" xlink:href="#linear-gradient-15"/>
+    <linearGradient id="linear-gradient-18" x1="0.57" y1="0.255" x2="0.5" y2="1.064" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#6c6de4"/>
+      <stop offset="1" stop-color="#8780f9"/>
+    </linearGradient>
+    <linearGradient id="linear-gradient-19" x1="0.8" y1="0.033" x2="0.331" y2="1.037" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#f6c8c5"/>
+      <stop offset="1" stop-color="#f39d97"/>
+    </linearGradient>
+    <filter id="bg-2" x="13.522" y="72.774" width="62.553" height="53.491" filterUnits="userSpaceOnUse">
+      <feOffset dy="12" input="SourceAlpha"/>
+      <feGaussianBlur stdDeviation="6" result="blur-19"/>
+      <feFlood flood-color="#8493f4" flood-opacity="0.471"/>
+      <feComposite operator="in" in2="blur-19"/>
+      <feComposite in="SourceGraphic"/>
+    </filter>
+    <clipPath id="clip-path">
+      <g transform="matrix(1, 0, 0, 1, 0, 0)" filter="url(#bg)">
+        <rect id="bg-3" data-name="bg" width="26.553" height="17.491" rx="3" fill="url(#linear-gradient)"/>
+      </g>
+    </clipPath>
+    <linearGradient id="linear-gradient-22" x1="0.5" y1="-0.237" x2="0.138" y2="1" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#fbadb4"/>
+      <stop offset="1" stop-color="#eb6a9f"/>
+    </linearGradient>
+    <filter id="Oval" x="0.138" y="113.2" width="51.566" height="50.572" filterUnits="userSpaceOnUse">
+      <feOffset dx="13" dy="6" input="SourceAlpha"/>
+      <feGaussianBlur stdDeviation="4" result="blur-20"/>
+      <feFlood flood-color="#a19fc4" flood-opacity="0.404"/>
+      <feComposite operator="in" in2="blur-20"/>
+      <feComposite in="SourceGraphic"/>
+    </filter>
+    <linearGradient id="linear-gradient-23" x1="1" y1="-0.072" x2="0.432" y2="1" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#ffd79a"/>
+      <stop offset="1" stop-color="#f88862"/>
+    </linearGradient>
+  </defs>
+  <g id="Illustration" transform="translate(-1.309 0.5)">
+    <g id="Shape" transform="translate(27.347 117.872)">
+      <g id="Rug" transform="translate(41.8 48.918)">
+        <path id="rug-2" data-name="rug" d="M0,26.782,27.753,1.488,157.8,0l-17.61,26.782Z" transform="translate(0 0)" fill="#fd7f80"/>
+        <path id="rug_copy" data-name="rug copy" d="M0,26.586,26.95,1.139,125.283,0l-18.59,26.586Z" transform="translate(16.298 0.195)" fill="#fab2b3"/>
+        <path id="Path_7" data-name="Path 7" d="M3.548,1.262s-8.072,8.685,2.9,10.709S.126,26.41,14.516,26.6s56,0,56,0L89.238,0Z" transform="translate(43.925 0)" fill="#fd7f80"/>
+      </g>
+      <g id="FlowerPot" transform="translate(0 0)">
+        <g id="Leave" transform="matrix(0.985, 0.174, -0.174, 0.985, 7.999, 0)">
+          <g id="Middle" transform="translate(20.996 0)">
+            <path id="Middle-2" data-name="Middle" d="M2.6,41.588s-3.651-13.11,1.1-18.009c4.39-5.181,6.434-4.1,5.837-11.082A17.4,17.4,0,0,1,11.6,0S2.994,5.751,1.285,13.619c-2.892,9.209,0,27.969,0,27.969" transform="translate(0 0)" fill="url(#linear-gradient-2)"/>
+            <path id="Path_2" data-name="Path 2" d="M8.639,0S4.709,4.982,4.709,7.724s1.334,6.512-1.541,9.333S-.82,27.727.644,36.367" transform="translate(0.66 2.654)" fill="none" stroke="#20b989" stroke-miterlimit="10" stroke-width="0.5"/>
+          </g>
+          <g id="Left" transform="translate(0 14.416)">
+            <path id="Left-2" data-name="Left" d="M0,0S8.035,5.211,8.878,9.8c.811,4.54,1.572,5.687,8.047,9,6.715,3.085,9.364,4.711,8.292,10.947a14.721,14.721,0,0,1-.431,1.579h1.549s2.566-8.934-6.674-20.412C10.338.525,0,0,0,0Z" transform="translate(0 0)" fill="url(#linear-gradient-3)"/>
+            <path id="Path-2" data-name="Path" d="M0,0S6.1,2.085,6.9,4.866s1.928,5.743,4.321,5.743c3.566,0,6.822,3.262,9.724,10.442,1.177,2.913.4,8.378.4,8.378" transform="translate(4.278 2.217)" fill="none" stroke="#27c492" stroke-miterlimit="10" stroke-width="0.5"/>
+          </g>
+          <g id="Right" transform="translate(23.081 8.988)">
+            <path id="Right-2" data-name="Right" d="M1.749,31.679s-.41-6.5,2.625-10.694,7.75-3.743,14.382-8.126C23.59,9.864,25.6,0,25.6,0S19.712.793,14.254,6.712C8.7,12.732,6.35,17.028,4.837,18.877,1.938,22.822,0,31.679,0,31.679Z" transform="translate(0)" fill="url(#linear-gradient-4)"/>
+            <path id="Path_3" data-name="Path 3" d="M23.711,0s-3.943,2.138-3.943,3.946-1.273,4.39-3.377,4.39-3.495,2.015-4.535,3.647c-1.386,2.173-4.909,3.444-8.686,8.258C.983,23.028,0,30.766,0,30.766" transform="translate(0.708 0.887)" fill="none" stroke="#1faf81" stroke-miterlimit="10" stroke-width="0.5"/>
+          </g>
+          <path id="Ground" d="M0,4.736S2.149,0,4.784,0s5.371,2.362,5.933,2.362,1.891-1.309,3.935-1.31,6.315,3.669,6.315,3.669Z" transform="matrix(0.985, -0.174, 0.174, 0.985, 14.095, 39.011)" fill="#694d42"/>
+        </g>
+        <path id="Path_2-2" data-name="Path 2" d="M1.949.1S-.2,2.344.022,7.32A12.244,12.244,0,0,0,6.345,17.537c3.429,1.924,15.619,3.956,24.2,0,3.275-1.51,6.932-4.678,6.932-10.217,0-5.1-2.491-7.32-2.491-7.32Z" transform="translate(6.145 45.871)" fill="url(#linear-gradient-5)"/>
+        <rect id="Rectangle" width="35.504" height="1.32" rx="0.66" transform="translate(7.461 45.211)" fill="#9d6686"/>
+      </g>
+    </g>
+    <g id="Phone" transform="translate(71.153 18.753)">
+      <g id="Frame" transform="translate(0 0)">
+        <path id="Path-3" data-name="Path" d="M12.879,0h60.1A12.891,12.891,0,0,1,85.857,12.9v124.74a12.891,12.891,0,0,1-12.879,12.9h-60.1A12.891,12.891,0,0,1,0,137.644V12.9A12.891,12.891,0,0,1,12.879,0Z" transform="translate(0 0)" fill="#3e3b68"/>
+        <path id="Path-4" data-name="Path" d="M8.586,0A8.594,8.594,0,0,0,0,8.6v124.74a8.594,8.594,0,0,0,8.586,8.6h60.1a8.594,8.594,0,0,0,8.586-8.6V8.6A8.594,8.594,0,0,0,68.686,0Z" transform="translate(4.623 4.622)" fill="#e7e6f8"/>
+        <path id="Rectangle-2" data-name="Rectangle" d="M2.377,0H37.249a2.377,2.377,0,0,1,2.377,2.377v0A5.547,5.547,0,0,1,34.08,7.924H5.547A5.547,5.547,0,0,1,0,2.377v0A2.377,2.377,0,0,1,2.377,0Z" transform="translate(23.181 2.351)" fill="#3e3b68"/>
+      </g>
+      <g id="_3-2" data-name="3" transform="translate(8.586 124.136)">
+        <g transform="matrix(1, 0, 0, 1, -78.43, -143.39)" filter="url(#_3)">
+          <rect id="_3-3" data-name="3" width="69.346" height="15.847" rx="3" transform="translate(78.43 143.39)" fill="#fff"/>
+        </g>
+        <rect id="date" width="26.418" height="1.981" rx="0.99" transform="translate(22.455 9.244)" fill="#e9e8f7"/>
+        <rect id="Transaction" width="11.888" height="1.981" rx="0.99" transform="translate(22.455 4.622)" fill="#c18ae9"/>
+        <g id="Group_2" data-name="Group 2" transform="translate(5.944 2.641)">
+          <path id="Path-5" data-name="Path" d="M3.175,2.861,4.293.111A.518.518,0,0,0,3.977,0a1.577,1.577,0,0,0-.694.267L3.2.311a1.765,1.765,0,0,1-.817.273.909.909,0,0,1-.4-.091A3.066,3.066,0,0,0,.736.08,1,1,0,0,0,0,.427L1.218,2.861Z" transform="translate(2.146)" fill="#df9cd0"/>
+          <path id="Path-6" data-name="Path" d="M7.043,7.153a1.559,1.559,0,0,0,1.092-.442,1.478,1.478,0,0,0,.451-1.046q0-.011,0-.023a6.368,6.368,0,0,0-1.66-4.187A8.588,8.588,0,0,0,5.339,0H3.247A8.717,8.717,0,0,0,1.66,1.455,6.385,6.385,0,0,0,0,5.642,1.489,1.489,0,0,0,.455,6.711a1.562,1.562,0,0,0,1.092.442Z" transform="translate(0 3.301)" fill="url(#linear-gradient-6)"/>
+          <text id="_" data-name="$" transform="translate(2.642 4.002)" fill="#fff" font-size="7" font-family="Karla-Bold, Karla" font-weight="700"><tspan x="0" y="6">$</tspan></text>
+        </g>
+      </g>
+      <g id="_2-2" data-name="2" transform="translate(8.586 104.327)">
+        <g transform="matrix(1, 0, 0, 1, -78.43, -123.58)" filter="url(#_2)">
+          <rect id="_2-3" data-name="2" width="69.346" height="15.847" rx="3" transform="translate(78.43 123.58)" fill="#fff"/>
+        </g>
+        <rect id="date-2" data-name="date" width="25.097" height="1.981" rx="0.99" transform="translate(22.455 9.244)" fill="#e9e8f7"/>
+        <rect id="Transaction-2" data-name="Transaction" width="9.907" height="1.981" rx="0.99" transform="translate(22.455 4.622)" fill="#8493f4"/>
+        <g id="Group" transform="translate(5.284 2.641)">
+          <path id="Path-7" data-name="Path" d="M7.925,3.962A3.961,3.961,0,1,1,3.963,0a.3.3,0,0,1,.3.3V3.659H7.622a.3.3,0,0,1,.3.3Z" transform="translate(0 1.321)" fill="#e9e8f7"/>
+          <g transform="matrix(1, 0, 0, 1, -83.71, -126.22)" filter="url(#Path)">
+            <path id="Path-8" data-name="Path" d="M3.416,1.4A4.139,4.139,0,0,1,4.451,4.12v.014a.315.315,0,0,1-.316.316H.316A.315.315,0,0,1,0,4.133V.316A.315.315,0,0,1,.316,0,4.137,4.137,0,0,1,3.416,1.4Z" transform="translate(88.51 126.22)" fill="url(#linear-gradient-7)"/>
+          </g>
+        </g>
+      </g>
+      <g id="_1-2" data-name="1" transform="translate(8.586 85.179)">
+        <g transform="matrix(1, 0, 0, 1, -78.43, -104.43)" filter="url(#_1)">
+          <rect id="_1-3" data-name="1" width="69.346" height="15.187" rx="3" transform="translate(78.43 104.43)" fill="#fff"/>
+        </g>
+        <rect id="date-3" data-name="date" width="31.701" height="1.981" rx="0.99" transform="translate(22.455 9.244)" fill="#e9e8f7"/>
+        <rect id="Transaction-3" data-name="Transaction" width="15.851" height="1.981" rx="0.99" transform="translate(22.455 4.622)" fill="#fd7f80"/>
+        <g id="Graph" transform="translate(3.963 3.962)">
+          <g transform="matrix(1, 0, 0, 1, -82.39, -108.39)" filter="url(#Rectangle_Copy_11)">
+            <rect id="Rectangle_Copy_11-2" data-name="Rectangle Copy 11" width="1.981" height="7.263" rx="0.5" transform="translate(92.96 108.39)" fill="#e9e8f7"/>
+          </g>
+          <g transform="matrix(1, 0, 0, 1, -82.39, -108.39)" filter="url(#Rectangle_Copy_7)">
+            <rect id="Rectangle_Copy_7-2" data-name="Rectangle Copy 7" width="1.981" height="1.981" rx="0.5" transform="translate(92.96 113.68)" fill="url(#linear-gradient-8)"/>
+          </g>
+          <rect id="Rectangle_Copy_3" data-name="Rectangle Copy 3" width="1.981" height="7.263" rx="0.5" transform="translate(7.925)" fill="#e9e8f7"/>
+          <g transform="matrix(1, 0, 0, 1, -82.39, -108.39)" filter="url(#Rectangle_Copy_8)">
+            <rect id="Rectangle_Copy_8-2" data-name="Rectangle Copy 8" width="1.981" height="4.622" rx="0.5" transform="translate(90.32 111.03)" fill="url(#linear-gradient-8)"/>
+          </g>
+          <rect id="Rectangle_Copy_6" data-name="Rectangle Copy 6" width="1.981" height="7.263" rx="0.5" transform="translate(5.284)" fill="#e9e8f7"/>
+          <g transform="matrix(1, 0, 0, 1, -82.39, -108.39)" filter="url(#Rectangle_Copy_2)">
+            <rect id="Rectangle_Copy_2-2" data-name="Rectangle Copy 2" width="1.981" height="3.301" rx="0.5" transform="translate(87.68 112.36)" fill="url(#linear-gradient-8)"/>
+          </g>
+          <g transform="matrix(1, 0, 0, 1, -82.39, -108.39)" filter="url(#Rectangle_Copy_4)">
+            <rect id="Rectangle_Copy_4-2" data-name="Rectangle Copy 4" width="1.981" height="7.263" rx="0.5" transform="translate(85.03 108.39)" fill="#e9e8f7"/>
+          </g>
+          <g transform="matrix(1, 0, 0, 1, -82.39, -108.39)" filter="url(#Rectangle_Copy)">
+            <rect id="Rectangle_Copy-2" data-name="Rectangle Copy" width="1.981" height="5.943" rx="0.5" transform="translate(85.03 109.71)" fill="url(#linear-gradient-8)"/>
+          </g>
+          <rect id="Rectangle-3" data-name="Rectangle" width="1.981" height="7.263" rx="0.5" fill="#e9e8f7"/>
+          <g transform="matrix(1, 0, 0, 1, -82.39, -108.39)" filter="url(#Rectangle_Copy_10)">
+            <rect id="Rectangle_Copy_10-2" data-name="Rectangle Copy 10" width="1.981" height="2.641" rx="0.5" transform="translate(82.39 113.02)" fill="url(#linear-gradient-12)"/>
+          </g>
+        </g>
+      </g>
+      <g id="Graph-2" data-name="Graph" transform="translate(8.586 17.168)">
+        <g transform="matrix(1, 0, 0, 1, -78.43, -36.42)" filter="url(#Rectangle_Copy_13)">
+          <rect id="Rectangle_Copy_13-2" data-name="Rectangle Copy 13" width="69.346" height="62.728" rx="5" transform="translate(78.43 36.42)" fill="#fff"/>
+        </g>
+        <g id="Lines" transform="translate(8.916 15.187)">
+          <path id="Line_5_Copy_5" data-name="Line 5 Copy 5" d="M.405,0V40.278" transform="translate(52.43 0.66)" fill="none" stroke="#e9e8f7" stroke-linecap="square" stroke-miterlimit="10" stroke-width="0.5"/>
+          <path id="Line_5_Copy_4" data-name="Line 5 Copy 4" d="M.456,0,.324,40.278" transform="translate(41.878 0.66)" fill="none" stroke="#e9e8f7" stroke-linecap="square" stroke-miterlimit="10" stroke-width="0.5"/>
+          <path id="Line_5_Copy_6" data-name="Line 5 Copy 6" d="M.456,0,.324,40.278" transform="translate(31.311 0.66)" fill="none" stroke="#e9e8f7" stroke-linecap="square" stroke-miterlimit="10" stroke-width="0.5"/>
+          <path id="Line_5_Copy_3" data-name="Line 5 Copy 3" d="M.456,0,.324,40.278" transform="translate(20.744 0.66)" fill="none" stroke="#e9e8f7" stroke-linecap="square" stroke-miterlimit="10" stroke-width="0.5"/>
+          <path id="Line_5_Copy_2" data-name="Line 5 Copy 2" d="M.405,0V40.278" transform="translate(10.162 0.66)" fill="none" stroke="#e9e8f7" stroke-linecap="square" stroke-miterlimit="10" stroke-width="0.5"/>
+          <path id="Line_5" data-name="Line 5" d="M.405,0V40.278" transform="translate(-0.405)" fill="none" stroke="#e9e8f7" stroke-linecap="square" stroke-miterlimit="10" stroke-width="0.5"/>
+        </g>
+        <g id="Days" transform="translate(1.981 52.824)">
+          <rect id="Value_Copy_9" data-name="Value Copy 9" width="4.653" height="2.641" rx="1.321" transform="translate(61.838)" fill="#e9e8f7"/>
+          <rect id="Value_Copy_8" data-name="Value Copy 8" width="4.653" height="2.641" rx="1.321" transform="translate(52.302)" fill="#e9e8f7"/>
+          <rect id="Value_Copy_7" data-name="Value Copy 7" width="4.653" height="2.641" rx="1.321" transform="translate(41.446)" fill="#e9e8f7"/>
+          <rect id="Value_Copy_6" data-name="Value Copy 6" width="4.653" height="2.641" rx="1.321" transform="translate(31.249)" fill="#e9e8f7"/>
+          <rect id="Value_Copy_5" data-name="Value Copy 5" width="4.653" height="2.641" rx="1.321" transform="translate(20.393)" fill="#e9e8f7"/>
+          <rect id="Value_Copy_4" data-name="Value Copy 4" width="4.653" height="2.641" rx="1.321" transform="translate(9.536)" fill="#e9e8f7"/>
+          <rect id="Value_Copy_3" data-name="Value Copy 3" width="4.653" height="2.641" rx="1.321" fill="#e9e8f7"/>
+        </g>
+        <g transform="matrix(1, 0, 0, 1, -78.43, -36.42)" filter="url(#Path_6_Copy)">
+          <path id="Path_6_Copy-2" data-name="Path 6 Copy" d="M0,10.931a15.247,15.247,0,0,0,9.04,1.614c5.313-.64,6.3-7.523,10.346-7.523s4.667,3.649,9.673,2.456C32.96,6.55,35.594,0,40.287,0s5.969,7.479,11.888,7.479c4.472,0,4.756-5.5,9.246-5.5,3.92,0,3.869,5.773,7.925,5.5" transform="translate(78.43 71.42)" fill="none" stroke="#c18ae9" stroke-miterlimit="10" stroke-width="1"/>
+        </g>
+        <g transform="matrix(1, 0, 0, 1, -78.43, -36.42)" filter="url(#Path_6)">
+          <path id="Path_6-2" data-name="Path 6" d="M0,16.17s5.047,1.77,7.925-.9c2.844-2.636,3.963-7.665,8.891-7.665s3.02,4.88,10.923,4.3C34.068,11.451,33.682,0,38.966,0s6.493,11.912,12.285,11.912c5.858,0,5.077-5.453,9.567-5.453,3.92,0,3.565,5.98,8.188,5.453" transform="translate(78.43 58.79)" fill="none" stroke="#6577e9" stroke-miterlimit="10" stroke-width="1"/>
+        </g>
+        <g id="Tooltip" transform="translate(50.854 15.847)">
+          <g transform="matrix(1, 0, 0, 1, -129.28, -52.27)" filter="url(#Value_Copy_10)">
+            <path id="Value_Copy_10-2" data-name="Value Copy 10" d="M0,.815A.815.815,0,0,1,.815,0H18.937a.815.815,0,0,1,.815.815V7.434a.815.815,0,0,1-.815.815H11.9a.815.815,0,0,0-.581.244l-.815.829a.815.815,0,0,1-1.118.042L8.342,8.451a.815.815,0,0,0-.537-.2H.815A.815.815,0,0,1,0,7.434Z" transform="translate(129.28 52.27)" fill="#8493f4"/>
+          </g>
+          <rect id="Value" width="14.7" height="2.899" rx="1" transform="translate(2.527 2.657)" fill="#fff"/>
+        </g>
+        <g id="Pointer" transform="translate(58.779 26.412)">
+          <ellipse id="Oval_Copy" data-name="Oval Copy" cx="2.972" cy="2.971" rx="2.972" ry="2.971" transform="translate(0 0)" fill="#6264db" opacity="0.232"/>
+          <ellipse id="Oval-2" data-name="Oval" cx="2.312" cy="2.311" rx="2.312" ry="2.311" transform="translate(0.66 0.66)" fill="#fff"/>
+          <ellipse id="Oval_Copy_2" data-name="Oval Copy 2" cx="0.991" cy="0.99" rx="0.991" ry="0.99" transform="translate(1.981 1.981)" fill="#8493f4"/>
+        </g>
+        <g id="Tabs" transform="translate(4.411 5.282)">
+          <rect id="Link_3_Copy" data-name="Link 3 Copy" width="11.888" height="2.423" rx="1.212" transform="translate(49.367)" fill="#e9e8f7"/>
+          <rect id="Link_3" data-name="Link 3" width="11.31" height="2.423" rx="1.212" transform="translate(32.574)" fill="#e9e8f7"/>
+          <rect id="selected" width="4.039" height="0.606" rx="0.303" transform="translate(20.686 3.962)" fill="#8493f4"/>
+          <rect id="Link_2" data-name="Link 2" width="9.695" height="2.423" rx="1.212" transform="translate(18.044)" fill="#8493f4"/>
+          <rect id="Link_1" data-name="Link 1" width="13.209" height="2.423" rx="1.212" transform="translate(0)" fill="#e9e8f7"/>
+        </g>
+      </g>
+    </g>
+    <g id="ManPoiting" transform="translate(138.505 48.106)">
+      <path id="Foot_1" data-name="Foot 1" d="M4.743,0S-.329.062.024,2.935s5.685,4.4,9.468,4.6,4.55-.476,4.747-3.3c.077-1.109-2.7.8-6.812-1.006A5.638,5.638,0,0,1,4.743,0Z" transform="translate(9.976 126.621)" fill="#717fe0"/>
+      <path id="Foot2" d="M14.24,4.409s-.075,2.62-2.015,2.62S.909,6.749,0,2.5C-.074-.129,5.755.008,5.755.008s0,2.359.43,2.814A6.17,6.17,0,0,0,9.374,4.409,24.3,24.3,0,0,0,14.24,4.409Z" transform="translate(31.927 126.505)" fill="#717fe0"/>
+      <g transform="matrix(1, 0, 0, 1, -137.2, -48.61)" filter="url(#Feet)">
+        <path id="Feet-2" data-name="Feet" d="M6.588,0S4.932,10.193,3.571,21.9,0,56.692,0,56.692a6.84,6.84,0,0,0,5.034,3.667,9.064,9.064,0,0,0,6.726-1.441S21.137,11.3,21.4,10.518s.843.207-.147,3.4.608,28.456.608,28.456l1.119,16.911a8.762,8.762,0,0,0,5.54,1.626,10.538,10.538,0,0,0,5.884-1.626s.054-22.814-.313-34.371S32.533.269,32.533.269,27.854,3.84,18.89,3.577,6.588,0,6.588,0Z" transform="translate(151.92 118.89)" fill="url(#linear-gradient-13)"/>
+      </g>
+      <path id="Face" d="M2.792,4.789C1.572,9.19,0,9.934,0,13.093s1.25,6.323,3.251,7.725A19.716,19.716,0,0,0,7.53,23.009v1.325a36.466,36.466,0,0,0,4.93.354,11.69,11.69,0,0,0,4.153-.508V22.141s-3.885.668-5.174-1.323A7.209,7.209,0,0,1,12.727,12.4c2.486-2.26,3.22-6.547-.8-6.212C8.631,6.506,4.639,1.676,3.691.456S4.012.388,2.792,4.789Z" transform="translate(26.587 9.852)" fill="#f6c8c5"/>
+      <path id="hair" d="M.917,9.859C-2.424-2.16,4.132-.883,8.251,1.794c3.188,2.072,5.122.387,8.514,1.578C29.823,7.958,28.2,21.8,22.19,27.647c-4.852,4.69-9.461,5.011-11.675,4.246S6.81,26.547,9.39,23.41s4.076-5.225,2.076-6.808S7.941,19.015.917,9.859Z" transform="translate(28.961 0)" fill="url(#linear-gradient-14)"/>
+      <g transform="matrix(1, 0, 0, 1, -137.2, -48.61)" filter="url(#right-hand)">
+        <path id="right-hand-2" data-name="right-hand" d="M3.589,0S8.232,10.393,7.643,20.867c-.567,8.253-.972,10.782-4.168,10.782S0,24.522,0,24.522A50.248,50.248,0,0,0,3.475,14.209C4.2,9.822,3.589,0,3.589,0Z" transform="translate(185.14 93.68)" fill="url(#linear-gradient-15)"/>
+      </g>
+      <path id="Pointing" d="M3.356,16.985a19.066,19.066,0,0,0-2.68-6c-2.242-3.577,3.244-5.2,3.244-5.2A19.431,19.431,0,0,0,2.809,1.3C2.1-.135,3.252-.332,3.646.462,5.1,3.109,7.107,6.61,7.107,6.61s3.725.164,1.7,3.353a8.569,8.569,0,0,0-.546,5.652A6.538,6.538,0,0,0,5.506,15.4,5.229,5.229,0,0,0,3.356,16.985Z" transform="translate(-0.138 16.399)" fill="#f6c8c5"/>
+      <path id="Path_6-3" data-name="Path 6" d="M4.219,0a48.4,48.4,0,0,1-.206,12.669A36.232,36.232,0,0,1,0,23.576H1.772s1.363-1.657,3.46-9.051A22.056,22.056,0,0,0,4.877,1.568C4.726,1.085,4.219,0,4.219,0Z" transform="translate(47.643 45.765)" opacity="0.472" fill="url(#linear-gradient-16)"/>
+      <path id="body" d="M30.656,2.281c-.568.259-.085,1.473-.576,2.053s-.99-.3-7.507,2.3-7.931,4.189-11.053,4.981C9.4,11.918,9.545-2.164,2.337.287-3.751,2.461,3.862,18.592,4.872,20.51S8.726,24.418,23,19.623c.112-.134.132.309.132.309l-4.9,1.494a69.349,69.349,0,0,0-1.389,9.793c0,3.165-.288,7.29,4.826,9.421s19.063,2.9,23-1.854c4.106-5.3,6.63-21.1,3.683-26.868s-7.036-6.13-7.036-6.13.426-3.177,0-3.714-.687.537-5,.537S31.224,2.022,30.656,2.281Z" transform="translate(2.686 31.645)" fill="url(#linear-gradient-17)"/>
+      <path id="shadow" d="M1.368,1.476,6.282,0s.407,3.681.358,5.466-.652,5.466-.652,5.466H0A33.413,33.413,0,0,1,.557,5.96C.842,4.445,1.368,1.476,1.368,1.476Z" transform="translate(19.547 51.576)" fill="url(#linear-gradient-18)"/>
+      <path id="hand" d="M.115.325,0,4.979S.029,5.99.45,5.99s1.123-1.131,1.123,0-.112,4.269-.112,4.269A4.76,4.76,0,0,0,5.292,5.99,9.991,9.991,0,0,0,4.016,0,3.115,3.115,0,0,1,2.175.856,3.535,3.535,0,0,1,.115.325Z" transform="translate(49.727 75.836)" fill="url(#linear-gradient-19)"/>
+    </g>
+    <g id="Card" transform="translate(32.832 78.274)">
+      <g transform="matrix(1, 0, 0, 1, -31.52, -78.77)" filter="url(#bg-2)">
+        <rect id="bg-4" data-name="bg" width="26.553" height="17.491" rx="3" transform="translate(31.52 78.77)" fill="url(#linear-gradient)"/>
+      </g>
+      <g id="Card-2" data-name="Card" clip-path="url(#clip-path)">
+        <rect id="Rectangle_Copy_9" data-name="Rectangle Copy 9" width="4.425" height="2.429" transform="translate(11.064 9.474)" fill="#fff" opacity="0.601"/>
+        <rect id="Rectangle_Copy_5" data-name="Rectangle Copy 5" width="7.376" height="2.429" transform="translate(2.213 9.474)" fill="#fff" opacity="0.596"/>
+        <rect id="Rectangle-4" data-name="Rectangle" width="31.962" height="2.429" transform="translate(-5.409 3.644)" fill="#fff" opacity="0.396"/>
+      </g>
+    </g>
+    <circle id="circle_copy_5" data-name="circle copy 5" cx="3.669" cy="3.669" r="3.669" transform="translate(115.183)" fill="none" stroke="#707070" stroke-miterlimit="10" stroke-width="1"/>
+    <circle id="circle_copy_6" data-name="circle copy 6" cx="4.484" cy="4.484" r="4.484" transform="translate(23.863 48.106)" fill="url(#linear-gradient-12)"/>
+    <rect id="Rectangle_Copy_3-2" data-name="Rectangle Copy 3" width="6.872" height="6.872" transform="translate(177.117 20.384) rotate(45)" fill="url(#linear-gradient-22)"/>
+    <g id="_2-4" data-name="$" transform="matrix(0.819, 0.574, -0.574, 0.819, 12.259, 118.322)">
+      <g transform="matrix(0.82, -0.57, 0.57, 0.82, -77.12, -91.05)" filter="url(#Oval)">
+        <ellipse id="Oval-3" data-name="Oval" cx="9.532" cy="9.545" rx="9.532" ry="9.545" transform="matrix(0.82, 0.57, -0.57, 0.82, 11.09, 119.2)" fill="#f08762"/>
+      </g>
+      <ellipse id="Oval-4" data-name="Oval" cx="8.77" cy="9.545" rx="8.77" ry="9.545" transform="translate(0 0)" fill="url(#linear-gradient-23)"/>
+      <path id="Shape-2" data-name="Shape" d="M3.459,9.926H2.613V8.736a6.874,6.874,0,0,1-2.586-.51V6.659a7.544,7.544,0,0,0,1.27.451,7.069,7.069,0,0,0,1.321.23V5.5l-.423-.155A4.513,4.513,0,0,1,.5,4.341,1.9,1.9,0,0,1,0,3,1.741,1.741,0,0,1,.687,1.584,3.462,3.462,0,0,1,2.6.911V0h.847V.886a6.876,6.876,0,0,1,2.5.547L5.381,2.82a6.563,6.563,0,0,0-1.934-.464V4.107a9.176,9.176,0,0,1,1.693.773,2.306,2.306,0,0,1,.732.714,1.76,1.76,0,0,1,.228.915,1.886,1.886,0,0,1-.694,1.517,3.5,3.5,0,0,1-1.947.685V9.926ZM3.476,5.82V7.3c.541-.1.8-.324.8-.7H4.3a.526.526,0,0,0-.2-.418A2.777,2.777,0,0,0,3.476,5.82ZM2.646,2.369c-.535.087-.8.292-.8.627h.017a.553.553,0,0,0,.182.418,2.213,2.213,0,0,0,.6.347Z" transform="translate(6.032 4.363)" fill="#fff"/>
+    </g>
+  </g>
+</svg>

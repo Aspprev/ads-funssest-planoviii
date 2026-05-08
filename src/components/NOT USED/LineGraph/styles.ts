@@ -1,0 +1,15 @@
+import styled from 'styled-components';
+
+export const Container = styled.div`
+height:100%;
+width:100%;
+display: block;
+  svg {
+
+    text{
+      fill: #979797!important;
+      font-weight: bold!important;
+    }
+
+  }
+`
